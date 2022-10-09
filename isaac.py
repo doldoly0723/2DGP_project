@@ -1,6 +1,7 @@
 from pico2d import*
-
+# 화면 크기
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
+# 전체 맵 크기
 FULL_MAP_WID, FULL_MAP_HEI = 7113, 4000
 
 # 캐릭터 이동 및 공격 키 입력
@@ -50,7 +51,9 @@ map_y = FULL_MAP_HEI // 2
 
 while running:
     clear_canvas()
+    # 이미지의 좌표를 변경하며 맵이 이동하는 것처럼 보임
     MAP.clip_draw(map_x,map_y,MAP_WIDTH,MAP_HEIGHT,mid_x,mid_y)
+    
     update_canvas()
 
     handle_events()
