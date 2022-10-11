@@ -12,17 +12,18 @@ class Map:
         self.mid_y = MAP_HEIGHT // 2
         self.map_x = FULL_MAP_WID // 2
         self.map_y = FULL_MAP_HEI // 2
-        self.head_x = 5
-        self.head_y = 900
-        self.head_WID = 40
-        self.head_HEI = 30
+        # 수정 필요 좌표 다시 구하기
+        self.head_x = 20
+        self.head_y = 835
+        self.head_WID = 115
+        self.head_HEI = 85
         self.head_frame = 0
 
     def update(self):
         # 키 입력에 따른 이동
         self.map_x += dir_x*5
         self.map_y += dir_y*5
-        self.head_frame = self.head_x + frame_head*40
+        self.head_frame = self.head_x + frame_head * self.head_WID
         # 키 입력에 따른 아이작 프레임 변화 머리, 다리 따로
         pass
     def draw(self):
