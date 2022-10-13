@@ -1,4 +1,6 @@
 from pico2d import*
+import random
+
 # 화면 크기
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 # 전체 맵 크기
@@ -23,13 +25,17 @@ class Map:
         # 키 입력에 따른 이동
         self.map_x += dir_x*5
         self.map_y += dir_y*5
-        self.head_frame = self.head_x + frame_head * self.head_WID
+
         # 키 입력에 따른 아이작 프레임 변화 머리, 다리 따로
         pass
+    def update_head_frame(self): # 0, 1 눈을 깜빡이게 하면서 이동속도를 늧추지 않게 하기 위해서는? 우선은 랜덤 처리
+        if random.randint(0,10) == 1:
+            self.head_frame = (self.head_frame+1)%2
+
     def draw(self):
         self.image_map.clip_draw(self.map_x,self.map_y,MAP_WIDTH,MAP_HEIGHT,self.mid_x,self.mid_y)
         # 머리
-        self.image_isaac.clip_draw(self.head_frame, self.head_y, self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
+        self.image_isaac.clip_draw((frame_head+self.head_frame)*self.head_WID+self.head_x, self.head_y, self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
         # 몸
         pass
 
@@ -91,6 +97,7 @@ while running:
     clear_canvas()
     handle_events()
     map.update()
+    map.update_head_frame()
     map.draw()
     update_canvas()
 
