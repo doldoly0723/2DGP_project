@@ -1,5 +1,4 @@
 from pico2d import*
-import random
 
 # 화면 크기
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
@@ -14,12 +13,14 @@ class Map:
         self.mid_y = MAP_HEIGHT // 2
         self.map_x = FULL_MAP_WID // 2
         self.map_y = FULL_MAP_HEI // 2
-        # 수정 필요 좌표 다시 구하기
+        # head
         self.head_x = 20
         self.head_y = 835
         self.head_WID = 115
         self.head_HEI = 85
         self.head_frame = 0
+        self.head_cnt = 0
+        #body
 
     def update(self):
         # 키 입력에 따른 이동
@@ -29,8 +30,13 @@ class Map:
         # 키 입력에 따른 아이작 프레임 변화 머리, 다리 따로
         pass
     def update_head_frame(self): # 0, 1 눈을 깜빡이게 하면서 이동속도를 늧추지 않게 하기 위해서는? 우선은 랜덤 처리
-        if random.randint(0,10) == 1:
-            self.head_frame = (self.head_frame+1)%2
+        self.head_cnt += 1
+        if self.head_cnt > 50:
+            if self.head_frame % 2 == 0:
+                self.head_frame = 1
+            else:
+                self.head_frame = 0
+            self.head_cnt = 0
 
     def draw(self):
         self.image_map.clip_draw(self.map_x,self.map_y,MAP_WIDTH,MAP_HEIGHT,self.mid_x,self.mid_y)
