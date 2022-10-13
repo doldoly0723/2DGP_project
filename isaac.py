@@ -21,7 +21,14 @@ class Map:
         self.head_frame = 0
         self.head_cnt = 0
         #body
-
+        self.body_WID = 93
+        self.body_HEI = 45
+        self.body_x = 30
+        self.body_y = 0 # UD, LR 에 따라 달라진다
+        self.body_UD_y = 710 #위, 아래 스프라이트
+        self.body_LR_y = 590 #왼쪽, 오른쪽 스프라이트
+        self.body_frame = 0
+        self.body_cnt = 0
     def update(self):
         # 키 입력에 따른 이동
         self.map_x += dir_x*5
@@ -32,17 +39,27 @@ class Map:
     def update_head_frame(self): # 0, 1 눈을 깜빡이게 하면서 이동속도를 늧추지 않게 하기 위해서는? 우선은 랜덤 처리
         self.head_cnt += 1
         if self.head_cnt > 50:
-            if self.head_frame % 2 == 0:
-                self.head_frame = 1
-            else:
-                self.head_frame = 0
+            self.head_frame = (self.head_frame+1)%2
             self.head_cnt = 0
+    def update_body_frame(self):
+        if frame_body_Y == 0:   #LR
+            self.body_y = self.body_LR_y
+        elif frame_body_Y == 1: #UD
+            self.body_y = self.body_UD_y
+
+        self.body_cnt += 1
+        if self.body_cnt > 20:
+            self.body_frame = (self.body_frame+1)%10
+            self.body_cnt = 0
 
     def draw(self):
         self.image_map.clip_draw(self.map_x,self.map_y,MAP_WIDTH,MAP_HEIGHT,self.mid_x,self.mid_y)
-        # 머리
-        self.image_isaac.clip_draw((frame_head+self.head_frame)*self.head_WID+self.head_x, self.head_y, self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
         # 몸
+        #self.image_isaac.clip_draw((frame_body_X + self.body_frame) * self.body_WID + self.body_x, self.body_y,self.body_WID, self.body_HEI, self.mid_x, self.mid_y - 45)
+        # 머리
+        #self.image_isaac.clip_draw((frame_head+self.head_frame)*self.head_WID+self.head_x, self.head_y, self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
+        self.image_isaac.clip_draw(self.body_x+self.body_WID,self.body_LR_y,93,-45,self.mid_x,self.mid_y)
+
         pass
 
 # 캐릭터 이동 및 공격 키 입력
@@ -50,7 +67,7 @@ def handle_events():
     global running
     global dir_y
     global dir_x
-    global frame_head
+    global frame_head, frame_body_Y, frame_body_X
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -70,12 +87,16 @@ def handle_events():
             #이동에 따른 아이작 스프라이트
             elif event.key == SDLK_UP:
                 frame_head = 4
+                frame_body_Y = 1    #UD
             elif event.key == SDLK_DOWN:
                 frame_head = 0
+                frame_body_Y = 1
             elif event.key == SDLK_LEFT:
                 frame_head = 6
+                frame_body_Y = 0    #LR
             elif event.key == SDLK_RIGHT:
                 frame_head = 2
+                frame_body_Y = 0
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_w:
                 dir_y -= 1
@@ -95,8 +116,8 @@ dir_x=0
 dir_y=0
 # 맵 이동에 따른 아이작 프레임 설정 머리 다리 따로 설정 필요
 frame_head = 0
-frame_bodyX = 0
-frame_bodyY = 0
+frame_body_X = 0    # 반전 스프라이트 필요?
+frame_body_Y = 1    # 상하 스프라이트인가 좌우 스프라이트인가
 map = Map()
 
 while running:
@@ -104,6 +125,7 @@ while running:
     handle_events()
     map.update()
     map.update_head_frame()
+    map.update_body_frame()
     map.draw()
     update_canvas()
 
