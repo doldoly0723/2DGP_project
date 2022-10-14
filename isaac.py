@@ -33,10 +33,25 @@ class Map:
         self.body_reverse_x = 26
 
         self.body_head_space = 45
+        # 테두리 경계선
+        self.end_of_left = 65
+        self.end_of_right = 4800
+        self.end_of_top = 2725
+        self.end_of_bottom = 0
     def update(self):
         # 키 입력에 따른 이동
         self.map_x += dir_x*5
         self.map_y += dir_y*5
+        # 맵 밖으로 못나가게 설정
+
+        if self.map_x < self.end_of_left:
+            self.map_x = self.end_of_left
+        elif self.map_x > self.end_of_right:
+            self.map_x = self.end_of_right
+        elif self.map_y > self.end_of_top:
+            self.map_y = self.end_of_top
+        elif self.map_y < self.end_of_bottom:
+            self.map_y = self.end_of_bottom
 
         # 키 입력에 따른 아이작 프레임 변화 머리, 다리 따로
         pass
@@ -138,7 +153,7 @@ while running:
     map.draw()
     update_canvas()
 
-    delay(0.01)
+    delay(0.001)
 
 
 
