@@ -9,6 +9,7 @@ class Map:
     def __init__(self):
         self.image_map = load_image('map.png')
         self.image_isaac = load_image('isaac.png')
+        self.image_isaac_reverse = load_image('isaac_reverse.png')
         self.mid_x = MAP_WIDTH // 2
         self.mid_y = MAP_HEIGHT // 2
         self.map_x = FULL_MAP_WID // 2
@@ -29,6 +30,9 @@ class Map:
         self.body_LR_y = 590 #왼쪽, 오른쪽 스프라이트
         self.body_frame = 0
         self.body_cnt = 0
+        self.body_reverse_x = 26
+
+        self.body_head_space = 45
     def update(self):
         # 키 입력에 따른 이동
         self.map_x += dir_x*5
@@ -55,11 +59,12 @@ class Map:
     def draw(self):
         self.image_map.clip_draw(self.map_x,self.map_y,MAP_WIDTH,MAP_HEIGHT,self.mid_x,self.mid_y)
         # 몸
-        #self.image_isaac.clip_draw((frame_body_X + self.body_frame) * self.body_WID + self.body_x, self.body_y,self.body_WID, self.body_HEI, self.mid_x, self.mid_y - 45)
+        if(frame_body_reverse == 0):
+            self.image_isaac.clip_draw(self.body_frame * self.body_WID + self.body_x, self.body_y,self.body_WID, self.body_HEI, self.mid_x, self.mid_y - self.body_head_space)
+        elif(frame_body_reverse == 1):
+            self.image_isaac_reverse.clip_draw(self.body_frame * self.body_WID + self.body_reverse_x, self.body_y,self.body_WID, self.body_HEI, self.mid_x, self.mid_y - self.body_head_space)
         # 머리
-        #self.image_isaac.clip_draw((frame_head+self.head_frame)*self.head_WID+self.head_x, self.head_y, self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
-        self.image_isaac.clip_draw(self.body_x+self.body_WID,self.body_LR_y,93,-45,self.mid_x,self.mid_y)
-
+        self.image_isaac.clip_draw((frame_head+self.head_frame)*self.head_WID+self.head_x, self.head_y, self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
         pass
 
 # 캐릭터 이동 및 공격 키 입력
@@ -67,7 +72,7 @@ def handle_events():
     global running
     global dir_y
     global dir_x
-    global frame_head, frame_body_Y, frame_body_X
+    global frame_head, frame_body_Y, frame_body_X, frame_body_reverse
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -88,15 +93,19 @@ def handle_events():
             elif event.key == SDLK_UP:
                 frame_head = 4
                 frame_body_Y = 1    #UD
+                frame_body_reverse = 1
             elif event.key == SDLK_DOWN:
                 frame_head = 0
                 frame_body_Y = 1
+                frame_body_reverse = 0
             elif event.key == SDLK_LEFT:
                 frame_head = 6
                 frame_body_Y = 0    #LR
+                frame_body_reverse = 1
             elif event.key == SDLK_RIGHT:
                 frame_head = 2
                 frame_body_Y = 0
+                frame_body_reverse = 0
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_w:
                 dir_y -= 1
@@ -116,7 +125,7 @@ dir_x=0
 dir_y=0
 # 맵 이동에 따른 아이작 프레임 설정 머리 다리 따로 설정 필요
 frame_head = 0
-frame_body_X = 0    # 반전 스프라이트 필요?
+frame_body_reverse = 0    # 반전 스프라이트 체크
 frame_body_Y = 1    # 상하 스프라이트인가 좌우 스프라이트인가
 map = Map()
 
