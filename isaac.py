@@ -132,29 +132,40 @@ def handle_events():
                 dir_x -= 1
     pass
 
-open_canvas(MAP_WIDTH,MAP_HEIGHT)
-
-
-running = True
-dir_x=0
-dir_y=0
+running = None
+dir_x = None
+dir_y = None
 # 맵 이동에 따른 아이작 프레임 설정 머리 다리 따로 설정 필요
-frame_head = 0
-frame_body_reverse = 0    # 반전 스프라이트 체크
-frame_body_Y = 1    # 상하 스프라이트인가 좌우 스프라이트인가
-map = Map()
+frame_head = None
+frame_body_reverse = None    # 반전 스프라이트 체크
+frame_body_Y = None    # 상하 스프라이트인가 좌우 스프라이트인가
+map = None
 
-while running:
-    clear_canvas()
-    handle_events()
+def enter():
+    global running
+    global dir_x, dir_y
+    global frame_head, frame_body_Y,frame_body_reverse
+    global map
+    running = True
+    dir_x = 0
+    dir_y = 0
+    frame_head = 0
+    frame_body_reverse = 0  # 반전 스프라이트 체크
+    frame_body_Y = 1  # 상하 스프라이트인가 좌우 스프라이트인가
+    map = Map()
+
+def exit():
+    global map
+    del map
+def update():
     map.update()
     map.update_head_frame()
     map.update_body_frame()
+
+def draw():
+    clear_canvas()
     map.draw()
+    delay(0.001)
     update_canvas()
 
-    delay(0.001)
 
-
-
-close_canvas()
