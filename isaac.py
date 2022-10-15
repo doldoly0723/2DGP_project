@@ -98,29 +98,33 @@ def handle_events():
             # 이동
             if event.key == SDLK_w:
                 dir_y += 1
+                frame_body_Y = 1    #UD
+                frame_body_reverse = 1
             elif event.key == SDLK_s:
                 dir_y -= 1
+                frame_body_Y = 1
+                frame_body_reverse = 0
             elif event.key == SDLK_a:
                 dir_x -= 1
+                frame_body_Y = 0    #LR
+                frame_body_reverse = 1
             elif event.key == SDLK_d:
                 dir_x += 1
+                frame_body_Y = 0
+                frame_body_reverse = 0
             #이동에 따른 아이작 스프라이트
             elif event.key == SDLK_UP:
                 frame_head = 4
-                frame_body_Y = 1    #UD
-                frame_body_reverse = 1
+
             elif event.key == SDLK_DOWN:
                 frame_head = 0
-                frame_body_Y = 1
-                frame_body_reverse = 0
+
             elif event.key == SDLK_LEFT:
                 frame_head = 6
-                frame_body_Y = 0    #LR
-                frame_body_reverse = 1
+
             elif event.key == SDLK_RIGHT:
                 frame_head = 2
-                frame_body_Y = 0
-                frame_body_reverse = 0
+
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_w:
                 dir_y -= 1
