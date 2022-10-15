@@ -15,6 +15,7 @@ class Sucker:
         self.sucker_status = 0  # 현재 존재하는가
         self.sucker_image = load_image('sucker.png')
         self.sucker_frame = 0
+        self.frame_count = 0
 
         self.choose_wall = 0 # 리스폰 지역 설정
         pass
@@ -49,7 +50,10 @@ class Sucker:
             if self.sucker_t > 1.0:
                 sucker.take_damage()
 
+        self.frame_count += 1
+        if self.frame_count == 10:
             self.sucker_frame = (self.sucker_frame + 1) % 2
+            self.frame_count = 0
             pass
 
     def draw(self):
