@@ -169,7 +169,7 @@ def update():
 def draw():
     clear_canvas()
     map.draw()
-    delay(0.001)
+    delay(0.01)
     update_canvas()
 
 
