@@ -12,7 +12,7 @@ class Sucker:
         self.sucker_y = 0
         self.sucker_sx = 0
         self.sucker_sy = 0
-        self.sucker_status = 0  # 현재 존재하는가
+        self.sucker_status = False  # 현재 존재하는가
         self.sucker_image = load_image('sucker.png')
         self.sucker_frame = 0
         self.frame_count = 0
@@ -21,34 +21,36 @@ class Sucker:
         pass
 
     def respawn_sucker(self):
-        # if 1 == random.randint(0, 10): #생성 구역 설정
-        #     self.choose_wall = random.randint(0,5)
-        #     self.sucker_status = 1
-        #     if self.choose_wall == 1:   #밑에 지역
-        #         self.sucker_x = random.randint(0,isaac.MAP_WIDTH)
-        #         self.sucker_y = 0
-        #     elif self.choose_wall == 2: #위 지역
-        #         self.sucker_x = random.randint(0,isaac.MAP_WIDTH)
-        #         self.sucker_y = isaac.MAP_HEIGHT
-        #     elif self.choose_wall == 3: #왼쪽
-        #         self.sucker_x = 0
-        #         self.sucker_y = random.randint(0,isaac.MAP_HEIGHT)
-        #     elif self.choose_wall == 4: #오른쪽
-        #         self.sucker_x = isaac.MAP_WIDTH
-        #         self.sucker_y = random.randint(0,isaac.MAP_HEIGHT)
-        self.sucker_status = 1
+        if 1 == random.randint(0, 1000): #랜덤한 시간으로 몬스터를 생성 난이도 상승시 범위도 같이 높여야 한다
+            if self.sucker_status == False:
+                self.choose_wall = random.randint(0, 5)
+                self.sucker_status = 1
+                if self.choose_wall == 1:   #밑에 지역
+                    self.sucker_x = random.randint(0,isaac.MAP_WIDTH)
+                    self.sucker_y = 0
+                elif self.choose_wall == 2: #위 지역
+                    self.sucker_x = random.randint(0,isaac.MAP_WIDTH)
+                    self.sucker_y = isaac.MAP_HEIGHT
+                elif self.choose_wall == 3: #왼쪽
+                    self.sucker_x = 0
+                    self.sucker_y = random.randint(0,isaac.MAP_HEIGHT)
+                elif self.choose_wall == 4: #오른쪽
+                    self.sucker_x = isaac.MAP_WIDTH
+                    self.sucker_y = random.randint(0,isaac.MAP_HEIGHT)
+                self.sucker_status = True
         # self.sucker_x = 0
         # self.sucker_y = 0
 
         pass
 
     def update(self):
-        if self.sucker_status == 1:
+        if self.sucker_status == True:
             self.sucker_t += 0.00001
             self.sucker_x = ((1-self.sucker_t)*self.sucker_x + self.sucker_t*isaac.map.mid_x) - isaac.dir_x*5
             self.sucker_y = ((1-self.sucker_t)*self.sucker_y + self.sucker_t*isaac.map.mid_y) - isaac.dir_y*5
             if self.sucker_t > 1.0:
                 sucker.take_damage()
+                #self.sucker_t -=0.00002
 
         self.frame_count += 1
         if self.frame_count == 10:
@@ -57,7 +59,7 @@ class Sucker:
             pass
 
     def draw(self):
-        if self.sucker_status == 1:
+        if self.sucker_status == True:
             self.sucker_image.clip_draw(self.sucker_frame*80, 0,
                                         self.sucker_WID, self.sucker_HEI, self.sucker_x, self.sucker_y)
 
@@ -78,17 +80,19 @@ def handle_events():
 open_canvas(isaac.MAP_WIDTH,isaac.MAP_HEIGHT)
 
 running = True
-sucker = Sucker()
+
 isaac.enter()
+#sucker = Sucker()
+monster = [Sucker() for i in range(10)] #현재 10개체 생성 난이도 상승시 개체수 상승
 
 while isaac.running:
     isaac.handle_events()
     isaac.update()
     isaac.draw()
-
-    sucker.respawn_sucker()
-    sucker.update()
-    sucker.draw()
+    for sucker in monster:
+        sucker.respawn_sucker()
+        sucker.update()
+        sucker.draw()
     update_canvas()
 
 isaac.exit()
