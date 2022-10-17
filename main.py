@@ -1,4 +1,6 @@
 import pico2d
+
+import attack
 import isaac
 
 pico2d.open_canvas(isaac.MAP_WIDTH,isaac.MAP_HEIGHT)
