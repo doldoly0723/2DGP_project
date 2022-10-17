@@ -10,6 +10,8 @@ class Map:
         self.image_map = load_image('map.png')
         self.image_isaac = load_image('isaac.png')
         self.image_isaac_reverse = load_image('isaac_reverse.png')
+
+
         self.mid_x = MAP_WIDTH // 2
         self.mid_y = MAP_HEIGHT // 2
         self.map_x = FULL_MAP_WID // 2
@@ -38,6 +40,7 @@ class Map:
         self.end_of_right = 4800
         self.end_of_top = 2725
         self.end_of_bottom = 0
+
     def update(self):
         # 키 입력에 따른 이동
         self.map_x += dir_x*5
@@ -71,6 +74,8 @@ class Map:
             self.body_frame = (self.body_frame+1)%10
             self.body_cnt = 0
 
+
+
     def draw(self):
         self.image_map.clip_draw(self.map_x,self.map_y,MAP_WIDTH,MAP_HEIGHT,self.mid_x,self.mid_y)
         # 몸
@@ -82,12 +87,84 @@ class Map:
         self.image_isaac.clip_draw((frame_head+self.head_frame)*self.head_WID+self.head_x, self.head_y, self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
         pass
 
+class Attack():
+    def __init__(self):
+        self.image_attack = load_image('tear.png')
+
+        self.frame_x = 347
+        self.frame_y = 39
+        self.attack_WID = 47
+        self.attack_HEI = 42
+        self.attack_speed = 5
+        self.attack_x = Map().mid_x
+        self.attack_y = Map().mid_y
+        self.attack_status = False
+        self.attack_dir = None
+
+        # 공격 범위
+        self.attack_range = 500
+
+    def update(self):
+        if attack_on == True: # 화살표 누르면 활성화
+            if self.attack_status == False:
+                if frame_head == 0: # down
+                    self.attack_dir = 0
+                elif frame_head == 4: #up
+                    self.attack_dir = 4
+                elif frame_head == 6: #left
+                    self.attack_dir = 6
+                elif frame_head == 2: # right
+                    self.attack_dir = 2
+
+            self.attack_status = True # 공격 방향으로 직진, 다른 방향 키 입력시 공격구체 방향이동x
+            if self.attack_status == True:
+                if self.attack_dir == 0:
+                    self.attack_y = (self.attack_y - self.attack_speed)
+                    if body_dir == 2 or body_dir == 6:
+                        self.attack_x -= dir_x*5
+                    elif body_dir == 0 or body_dir == 4:
+                        self.attack_y -= dir_y * 4
+
+                elif self.attack_dir == 4:
+                    self.attack_y = (self.attack_y + self.attack_speed)
+                    if body_dir == 2 or body_dir == 6:
+                        self.attack_x -= dir_x * 5
+                    elif body_dir == 0 or body_dir == 4:
+                        self.attack_y -= dir_y * 4
+
+                elif self.attack_dir == 6:
+                    self.attack_x = (self.attack_x - self.attack_speed)
+                    if body_dir == 4 or body_dir == 0:  #공격 후 이동시 구체는 일정하게 이동
+                        self.attack_y -= dir_y*5
+                    elif body_dir == 2 or body_dir == 6:  # 공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
+                        self.attack_x -= dir_x * 4
+
+                elif self.attack_dir == 2:
+                    self.attack_x = (self.attack_x + self.attack_speed)
+                    if body_dir == 4 or body_dir == 0:  #공격 후 이동시 구체는 일정하게 이동
+                        self.attack_y -= dir_y*4
+                    elif body_dir == 2 or body_dir == 6: #공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
+                        self.attack_x -= dir_x*4
+            #캐릭터 이동에 따라 공격구체의 좌표값이 같이 따라 움직이는 부분 수정
+
+
+
+    def draw(self):
+        if self.attack_status == True:
+            self.image_attack.clip_draw(self.frame_x, self.frame_y,
+                                    self.attack_WID, self.attack_HEI, self.attack_x, self.attack_y)
+
+
+        pass
+
 # 캐릭터 이동 및 공격 키 입력
 def handle_events():
     global running
     global dir_y
     global dir_x
     global frame_head, frame_body_Y, frame_body_X, frame_body_reverse
+    global attack_on, body_dir
+    global tears
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -100,31 +177,38 @@ def handle_events():
                 dir_y += 1
                 frame_body_Y = 1    #UD
                 frame_body_reverse = 1
+                body_dir = 4    #up
             elif event.key == SDLK_s:
                 dir_y -= 1
                 frame_body_Y = 1
                 frame_body_reverse = 0
+                body_dir = 0    #down
             elif event.key == SDLK_a:
                 dir_x -= 1
                 frame_body_Y = 0    #LR
                 frame_body_reverse = 1
+                body_dir = 2    #left
             elif event.key == SDLK_d:
                 dir_x += 1
                 frame_body_Y = 0
                 frame_body_reverse = 0
+                body_dir = 6    #right
             #이동에 따른 아이작 스프라이트
+            #키누르면 공격 모드 시작
             elif event.key == SDLK_UP:
                 frame_head = 4
-
+                attack_on = True
             elif event.key == SDLK_DOWN:
                 frame_head = 0
-
+                attack_on = True
             elif event.key == SDLK_LEFT:
                 frame_head = 6
-
+                attack_on = True
+                tears += [Attack()]
             elif event.key == SDLK_RIGHT:
                 frame_head = 2
-
+                attack_on = True
+                tears += [Attack()]
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_w:
                 dir_y -= 1
@@ -134,7 +218,16 @@ def handle_events():
                 dir_x += 1
             elif event.key == SDLK_d:
                 dir_x -= 1
-    pass
+    #         #공격 버튼 up 시 공격모드 취소
+    #         elif event.key == SDLK_UP:
+    #             attack_on = False
+    #         elif event.key == SDLK_DOWN:
+    #             attack_on = False
+    #         elif event.key == SDLK_LEFT:
+    #             attack_on = False
+    #         elif event.key == SDLK_RIGHT:
+    #             attack_on = False
+    # pass
 
 running = None
 dir_x = None
@@ -144,13 +237,18 @@ frame_head = None
 frame_body_reverse = None    # 반전 스프라이트 체크
 frame_body_Y = None    # 상하 스프라이트인가 좌우 스프라이트인가
 map = None
+attack_on = None
+body_dir = None
+tears = None
 
 def enter():
     global running
     global dir_x, dir_y
     global frame_head, frame_body_Y,frame_body_reverse
     global map
+    global attack_on, tears, body_dir
     running = True
+    attack_on = False
     dir_x = 0
     dir_y = 0
     frame_head = 0
@@ -158,17 +256,26 @@ def enter():
     frame_body_Y = 1  # 상하 스프라이트인가 좌우 스프라이트인가
     map = Map()
 
+    tears = [Attack()]
+    body_dir = 0
+
 def exit():
-    global map
+    global map, tears
     del map
+    del tears
 def update():
     map.update()
     map.update_head_frame()
     map.update_body_frame()
+    for tear in tears:
+        tear.update()
 
 def draw():
     clear_canvas()
     map.draw()
+    for tear in tears:
+        tear.draw()
+
     delay(0.01)
     update_canvas()
 
