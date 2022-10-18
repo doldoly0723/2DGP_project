@@ -1,7 +1,7 @@
 import pico2d
 
-import attack
 import isaac
+import monster
 
 pico2d.open_canvas(isaac.MAP_WIDTH,isaac.MAP_HEIGHT)
 
@@ -11,7 +11,6 @@ while isaac.running:
     isaac.handle_events()
     isaac.update()
     isaac.draw()
-
 isaac.exit()
 
 pico2d.clear_canvas()

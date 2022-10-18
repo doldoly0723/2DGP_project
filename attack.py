@@ -20,8 +20,10 @@ class Attack():
         self.attack_status = False
         self.attack_dir = None
 
-        # 공격 범위
+        # 공격 범위 나중에 설정
         self.attack_range = 500
+
+        self.attack_damage = 100
 
     def update(self):
         if attack_on == True: # 화살표 누르면 활성화
@@ -65,7 +67,9 @@ class Attack():
                     elif body_dir == 2 or body_dir == 6: #공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
                         self.attack_x -= isaac.dir_x*4
             #캐릭터 이동에 따라 공격구체의 좌표값이 같이 따라 움직이는 부분 수정
-
+        # if monster.Sucker().sucker_x-40 <= self.attack_x <= monster.Sucker().sucker_x+40:
+        #     if monster.Sucker().sucker_y-40 <= self.attack_y <= monster.Sucker().sucker_y+40:
+        #         self.attack_status = False
 
 
     def draw(self):
@@ -100,5 +104,5 @@ def update():
 def draw():
     for tear in tears:
         tear.draw()
-    update_canvas()
+    #update_canvas()
 

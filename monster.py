@@ -1,8 +1,7 @@
 from pico2d import*
 import isaac
 import random   # 몬스터의 출현
-
-
+MAP_WIDTH, MAP_HEIGHT = 1600, 900
 class Sucker:
     def __init__(self):
         self.sucker_WID = 80
@@ -14,8 +13,11 @@ class Sucker:
         self.sucker_sy = 0
         self.sucker_status = False  # 현재 존재하는가
         self.sucker_image = load_image('sucker.png')
+        self.sucker_reverse_image = load_image('sucker_reverse.png')
         self.sucker_frame = 0
         self.frame_count = 0
+
+        self.reverse_x = MAP_WIDTH//2
 
         self.choose_wall = 0 # 리스폰 지역 설정
         pass
@@ -60,44 +62,36 @@ class Sucker:
 
     def draw(self):
         if self.sucker_status == True:
-            self.sucker_image.clip_draw(self.sucker_frame*80, 0,
+            if self.sucker_x <= self.reverse_x: # sucker 스프라이트 좌우 방향
+                self.sucker_image.clip_draw(self.sucker_frame*80, 0,
                                         self.sucker_WID, self.sucker_HEI, self.sucker_x, self.sucker_y)
-
+            else:
+                self.sucker_reverse_image.clip_draw(self.sucker_frame * 80, 0,
+                                            self.sucker_WID, self.sucker_HEI, self.sucker_x, self.sucker_y)
         pass
 
     def take_damage(self):
         pass
 
-def handle_events():
-    global running
-    events = get_events()
-    for event in events:
-        if event.type == SDL_QUIT:
-            running = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
 
-open_canvas(isaac.MAP_WIDTH,isaac.MAP_HEIGHT)
 
-running = True
+def enter():
+    global monster
+    # 현재 10개체 생성 난이도 상승시 개체수 상승 난이도 상승을 개채를 더할것인지 랜덤 범위를 줄일것인지
+    monster = [Sucker() for i in range(10)]
 
-isaac.enter()
-#sucker = Sucker()
-monster = [Sucker() for i in range(10)] #현재 10개체 생성 난이도 상승시 개체수 상승
-
-while isaac.running:
-    isaac.handle_events()
-    isaac.update()
-    isaac.draw()
+def exit():
+    global monster
+    del monster
+def update():
     for sucker in monster:
         sucker.respawn_sucker()
         sucker.update()
+def draw():
+    for sucker in monster:
         sucker.draw()
-    update_canvas()
 
-isaac.exit()
 
-pico2d.clear_canvas()
 
 
 

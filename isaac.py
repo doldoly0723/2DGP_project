@@ -1,5 +1,6 @@
 from pico2d import*
 import attack
+import monster
 
 # 화면 크기
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
@@ -168,6 +169,7 @@ def enter():
     global frame_head, frame_body_Y,frame_body_reverse
     global map
     attack.enter()
+    monster.enter()
     running = True
     dir_x = 0
     dir_y = 0
@@ -180,15 +182,19 @@ def enter():
 def exit():
     global map, tears
     del map
+    attack.exit()
+    monster.exit()
 def update():
     map.update()
     map.update_head_frame()
     map.update_body_frame()
     attack.update()
+    monster.update()
 def draw():
     clear_canvas()
     map.draw()
     attack.draw()
+    monster.draw()
     delay(0.01)
     update_canvas()
 
