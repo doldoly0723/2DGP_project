@@ -74,7 +74,7 @@ class Attack():
                     del tears[attack_cnt]
                     attack_cnt -= 1
                     i.sucker_hp -= 100
-                    print(i.sucker_hp)
+                    print('HP:',i.sucker_hp)
                     if i.sucker_hp <= 0:
                         i.sucker_status = False
 

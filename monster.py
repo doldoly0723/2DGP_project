@@ -9,8 +9,6 @@ class Sucker:
         self.sucker_t = 0
         self.sucker_x = 0
         self.sucker_y = 0
-        self.sucker_sx = 0
-        self.sucker_sy = 0
         self.sucker_status = False  # 현재 존재하는가
         self.sucker_image = load_image('sucker.png')
         self.sucker_reverse_image = load_image('sucker_reverse.png')
@@ -28,7 +26,10 @@ class Sucker:
         if 1 == random.randint(0, 1000): #랜덤한 시간으로 몬스터를 생성 난이도 상승시 범위도 같이 높여야 한다
             if self.sucker_status == False:
                 self.choose_wall = random.randint(0, 5)
-                self.sucker_status = 1
+                #self.sucker_status = 1
+                #초기화 작업
+                self.sucker_hp = 200
+                self.sucker_t = 0
                 if self.choose_wall == 1:   #밑에 지역
                     self.sucker_x = random.randint(0,isaac.MAP_WIDTH)
                     self.sucker_y = 0
