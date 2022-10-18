@@ -78,6 +78,7 @@ class Map:
 
 
 
+
     def draw(self):
         self.image_map.clip_draw(self.map_x,self.map_y,MAP_WIDTH,MAP_HEIGHT,self.mid_x,self.mid_y)
         # 몸
@@ -131,18 +132,22 @@ def handle_events():
                 frame_head = 4
                 attack.attack_on = True
                 attack.tears += [attack.Attack()]
+                attack.attack_cnt += 1
             elif event.key == SDLK_DOWN:
                 frame_head = 0
                 attack.attack_on = True
                 attack.tears += [attack.Attack()]
+                attack.attack_cnt += 1
             elif event.key == SDLK_LEFT:
                 frame_head = 6
                 attack.attack_on = True
                 attack.tears += [attack.Attack()]
+                attack.attack_cnt += 1
             elif event.key == SDLK_RIGHT:
                 frame_head = 2
                 attack.attack_on = True
                 attack.tears += [attack.Attack()]
+                attack.attack_cnt += 1
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_w:
                 dir_y -= 1

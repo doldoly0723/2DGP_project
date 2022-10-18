@@ -1,5 +1,6 @@
 from pico2d import*
 import isaac
+import monster
 
 # 화면 크기
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
@@ -26,6 +27,7 @@ class Attack():
         self.attack_damage = 100
 
     def update(self):
+        global tears, attack_cnt
         if attack_on == True: # 화살표 누르면 활성화
             if self.attack_status == False:
                 if isaac.frame_head == 0: # down
@@ -66,7 +68,16 @@ class Attack():
                         self.attack_y -= isaac.dir_y*5
                     elif body_dir == 2 or body_dir == 6: #공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
                         self.attack_x -= isaac.dir_x*4
-            #캐릭터 이동에 따라 공격구체의 좌표값이 같이 따라 움직이는 부분 수정
+        for i in monster.monster:   # 공격 구체와 몬스터 접촉
+            if i.sucker_x - 40 <= self.attack_x <= i.sucker_x + 40:
+                if i.sucker_y <= self.attack_y <= i.sucker_y + 40:
+                    del tears[attack_cnt]
+                    attack_cnt -= 1
+                    i.sucker_hp -= 100
+                    print(i.sucker_hp)
+                    if i.sucker_hp <= 0:
+                        i.sucker_status = False
+
         # if monster.Sucker().sucker_x-40 <= self.attack_x <= monster.Sucker().sucker_x+40:
         #     if monster.Sucker().sucker_y-40 <= self.attack_y <= monster.Sucker().sucker_y+40:
         #         self.attack_status = False
@@ -88,12 +99,15 @@ class Attack():
 attack_on = None
 body_dir = None
 tears = None
+attack_cnt = None
 
 def enter():
     global attack_on, tears, body_dir
+    global attack_cnt
     attack_on = False
     tears = [Attack()]
     body_dir = 0
+    attack_cnt = 0 #공격 횟수
 
 def exit():
     global tears

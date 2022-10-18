@@ -20,6 +20,8 @@ class Sucker:
         self.reverse_x = MAP_WIDTH//2
 
         self.choose_wall = 0 # 리스폰 지역 설정
+
+        self.sucker_hp = 200
         pass
 
     def respawn_sucker(self):
@@ -50,9 +52,8 @@ class Sucker:
             self.sucker_t += 0.00001
             self.sucker_x = ((1-self.sucker_t)*self.sucker_x + self.sucker_t*isaac.map.mid_x) - isaac.dir_x*5
             self.sucker_y = ((1-self.sucker_t)*self.sucker_y + self.sucker_t*isaac.map.mid_y) - isaac.dir_y*5
-            if self.sucker_t > 1.0:
-                sucker.take_damage()
-                #self.sucker_t -=0.00002
+            #if self.sucker_t > 1.0:
+
 
         self.frame_count += 1
         if self.frame_count == 10:
@@ -73,21 +74,23 @@ class Sucker:
     def take_damage(self):
         pass
 
-
+monster = None
 
 def enter():
     global monster
     # 현재 10개체 생성 난이도 상승시 개체수 상승 난이도 상승을 개채를 더할것인지 랜덤 범위를 줄일것인지
-    monster = [Sucker() for i in range(10)]
+    monster = [Sucker() for i in range(3)]
 
 def exit():
     global monster
     del monster
 def update():
+    global monster
     for sucker in monster:
         sucker.respawn_sucker()
         sucker.update()
 def draw():
+    global monster
     for sucker in monster:
         sucker.draw()
 
