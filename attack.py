@@ -26,7 +26,11 @@ class Attack():
 
         self.attack_damage = 100
         self.attack_num = attack_cnt # 처음 생성될때 번호를 가지고 생성
-        print(self.attack_num)
+
+        self.Num_tear = None # 2개 연속 사격시 처음 구체 사라지고 두번째 구체를 사라지게 하기 위한 변수
+
+        print('생성: ', self.attack_num)
+
     def update(self):
         global tears, attack_cnt
         if attack_on == True: # 화살표 누르면 활성화
@@ -69,11 +73,20 @@ class Attack():
                         self.attack_y -= isaac.dir_y*5
                     elif body_dir == 2 or body_dir == 6: #공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
                         self.attack_x -= isaac.dir_x*4
+
         for i in monster.monster:   # 공격 구체와 몬스터 접촉
             if i.sucker_x - 40 <= self.attack_x <= i.sucker_x + 40:
                 if i.sucker_y - 40 <= self.attack_y <= i.sucker_y + 40:
+
+                    print(len(tears))
                     print('총 공격 수, 현재 구체 넘버 ', attack_cnt, self.attack_num)
                     del tears[self.attack_num]
+
+                    self.Num_tear = self.attack_num         #2연속 구체 공격시 2번째 삭제 오류
+                    for j in tears:
+                        if j.attack_num > self.Num_tear:
+                            j.attack_num -= 1
+
                     attack_cnt -= 1
                     print('공격 전 체력: ', i.sucker_hp)
                     i.sucker_hp -= 100

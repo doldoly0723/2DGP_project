@@ -131,23 +131,27 @@ def handle_events():
             elif event.key == SDLK_UP:
                 frame_head = 4
                 attack.attack_on = True
-                attack.tears += [attack.Attack()]
                 attack.attack_cnt += 1
+                attack.tears += [attack.Attack()]
+
             elif event.key == SDLK_DOWN:
                 frame_head = 0
                 attack.attack_on = True
-                attack.tears += [attack.Attack()]
                 attack.attack_cnt += 1
+                attack.tears += [attack.Attack()]
+
             elif event.key == SDLK_LEFT:
                 frame_head = 6
                 attack.attack_on = True
-                attack.tears += [attack.Attack()]
                 attack.attack_cnt += 1
+                attack.tears += [attack.Attack()]
+
             elif event.key == SDLK_RIGHT:
                 frame_head = 2
                 attack.attack_on = True
-                attack.tears += [attack.Attack()]
                 attack.attack_cnt += 1
+                attack.tears += [attack.Attack()]
+
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_w:
                 dir_y -= 1
