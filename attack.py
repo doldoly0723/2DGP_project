@@ -25,7 +25,8 @@ class Attack():
         self.attack_range = 500
 
         self.attack_damage = 100
-
+        self.attack_num = attack_cnt # 처음 생성될때 번호를 가지고 생성
+        print(self.attack_num)
     def update(self):
         global tears, attack_cnt
         if attack_on == True: # 화살표 누르면 활성화
@@ -70,11 +71,13 @@ class Attack():
                         self.attack_x -= isaac.dir_x*4
         for i in monster.monster:   # 공격 구체와 몬스터 접촉
             if i.sucker_x - 40 <= self.attack_x <= i.sucker_x + 40:
-                if i.sucker_y <= self.attack_y <= i.sucker_y + 40:
-                    del tears[attack_cnt]
+                if i.sucker_y - 40 <= self.attack_y <= i.sucker_y + 40:
+                    print('총 공격 수, 현재 구체 넘버 ', attack_cnt, self.attack_num)
+                    del tears[self.attack_num]
                     attack_cnt -= 1
+                    print('공격 전 체력: ', i.sucker_hp)
                     i.sucker_hp -= 100
-                    print('HP:',i.sucker_hp)
+                    print('공격 후 체력: ', i.sucker_hp)
                     if i.sucker_hp <= 0:
                         i.sucker_status = False
 
@@ -99,7 +102,7 @@ class Attack():
 attack_on = None
 body_dir = None
 tears = None
-attack_cnt = None
+attack_cnt = 0
 
 def enter():
     global attack_on, tears, body_dir

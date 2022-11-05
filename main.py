@@ -1,7 +1,6 @@
 import pico2d
 
 import isaac
-import monster
 
 pico2d.open_canvas(isaac.MAP_WIDTH,isaac.MAP_HEIGHT)
 

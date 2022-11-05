@@ -19,10 +19,12 @@ class Sucker:
 
         self.choose_wall = 0 # 리스폰 지역 설정
 
-        self.sucker_hp = 200
+        self.sucker_hp = 100
         pass
 
     def respawn_sucker(self):
+        if self.sucker_status == False:
+            Sucker.__init__(self); # 초기화
         if 1 == random.randint(0, 1000): #랜덤한 시간으로 몬스터를 생성 난이도 상승시 범위도 같이 높여야 한다
             if self.sucker_status == False:
                 self.choose_wall = random.randint(0, 5)
@@ -80,7 +82,7 @@ monster = None
 def enter():
     global monster
     # 현재 10개체 생성 난이도 상승시 개체수 상승 난이도 상승을 개채를 더할것인지 랜덤 범위를 줄일것인지
-    monster = [Sucker() for i in range(3)]
+    monster = [Sucker() for i in range(5)]
 
 def exit():
     global monster
