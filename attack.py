@@ -1,6 +1,7 @@
 from pico2d import*
 import isaac
 import monster
+import playstate
 
 # 화면 크기
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
@@ -35,13 +36,13 @@ class Attack():
         global tears, attack_cnt
         if attack_on == True: # 화살표 누르면 활성화
             if self.attack_status == False:
-                if isaac.frame_head == 0: # down
+                if playstate.player.frame_head == 0: # down
                     self.attack_dir = 0
-                elif isaac.frame_head == 4: #up
+                elif playstate.player.frame_head == 4: #up
                     self.attack_dir = 4
-                elif isaac.frame_head == 6: #left
+                elif playstate.player.frame_head == 6: #left
                     self.attack_dir = 6
-                elif isaac.frame_head == 2: # right
+                elif playstate.player.frame_head == 2: # right
                     self.attack_dir = 2
 
             self.attack_status = True # 공격 방향으로 직진, 다른 방향 키 입력시 공격구체 방향이동x
@@ -49,41 +50,41 @@ class Attack():
                 if self.attack_dir == 0:
                     self.attack_y = (self.attack_y - self.attack_speed)
                     if body_dir == 2 or body_dir == 6:
-                        self.attack_x -= isaac.dir_x*5
+                        self.attack_x -= playstate.player.dir_x*5
                     elif body_dir == 0 or body_dir == 4:
-                        self.attack_y -= isaac.dir_y * 4
+                        self.attack_y -= playstate.player.dir_y * 4
 
                 elif self.attack_dir == 4:
                     self.attack_y = (self.attack_y + self.attack_speed)
                     if body_dir == 2 or body_dir == 6:
-                        self.attack_x -= isaac.dir_x * 5
+                        self.attack_x -= playstate.player.dir_x * 5
                     elif body_dir == 0 or body_dir == 4:
-                        self.attack_y -= isaac.dir_y * 4
+                        self.attack_y -= playstate.player.dir_y * 4
 
                 elif self.attack_dir == 6:
                     self.attack_x = (self.attack_x - self.attack_speed)
                     if body_dir == 4 or body_dir == 0:  #공격 후 이동시 구체는 일정하게 이동
-                        self.attack_y -= isaac.dir_y*5
+                        self.attack_y -= playstate.player.dir_y*5
                     elif body_dir == 2 or body_dir == 6:  # 공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
-                        self.attack_x -= isaac.dir_x * 4
+                        self.attack_x -= playstate.player.dir_x * 4
 
                 elif self.attack_dir == 2:
                     self.attack_x = (self.attack_x + self.attack_speed)
                     if body_dir == 4 or body_dir == 0:  #공격 후 이동시 구체는 일정하게 이동
-                        self.attack_y -= isaac.dir_y*5
+                        self.attack_y -= playstate.player.dir_y*5
                     elif body_dir == 2 or body_dir == 6: #공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
-                        self.attack_x -= isaac.dir_x*4
+                        self.attack_x -= playstate.player.dir_x*4
 
-        for i in monster.monster:   # 공격 구체와 몬스터 접촉
+        for i in playstate.suckers:   # 공격 구체와 몬스터 접촉
             if i.sucker_x - 40 <= self.attack_x <= i.sucker_x + 40:
                 if i.sucker_y - 40 <= self.attack_y <= i.sucker_y + 40:
 
-                    print(len(tears))
+                    print(len(playstate.tears))
                     print('총 공격 수, 현재 구체 넘버 ', attack_cnt, self.attack_num)
-                    del tears[self.attack_num]
+                    del playstate.tears[self.attack_num]
 
                     self.Num_tear = self.attack_num         #2연속 구체 공격시 2번째 삭제 오류
-                    for j in tears:
+                    for j in playstate.tears:
                         if j.attack_num > self.Num_tear:
                             j.attack_num -= 1
 
@@ -110,29 +111,26 @@ class Attack():
 # 캐릭터 이동 및 공격 키 입력
 
 
+attack_on = False
+body_dir = 0
+attack_cnt = 0  # 공격 횟수
 
-
-attack_on = None
-body_dir = None
-tears = None
-attack_cnt = 0
-
-def enter():
-    global attack_on, tears, body_dir
-    global attack_cnt
-    attack_on = False
-    tears = [Attack()]
-    body_dir = 0
-    attack_cnt = 0 #공격 횟수
-
-def exit():
-    global tears
-    del tears
-def update():
-    for tear in tears:
-        tear.update()
-def draw():
-    for tear in tears:
-        tear.draw()
-    #update_canvas()
-
+# def enter():
+#     global attack_on, tears, body_dir
+#     global attack_cnt
+#     attack_on = False
+#     tears = [Attack()]
+#     body_dir = 0
+#     attack_cnt = 0 #공격 횟수
+#
+# def exit():
+#     global tears
+#     del tears
+# def update():
+#     for tear in tears:
+#         tear.update()
+# def draw():
+#     for tear in tears:
+#         tear.draw()
+#     #update_canvas()
+#

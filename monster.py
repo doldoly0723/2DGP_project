@@ -1,6 +1,7 @@
 from pico2d import*
 import isaac
 import random   # 몬스터의 출현
+import playstate
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 class Sucker:
     def __init__(self):
@@ -53,8 +54,8 @@ class Sucker:
     def update(self):
         if self.sucker_status == True:
             self.sucker_t += 0.00001
-            self.sucker_x = ((1-self.sucker_t)*self.sucker_x + self.sucker_t*isaac.map.mid_x) - isaac.dir_x*5
-            self.sucker_y = ((1-self.sucker_t)*self.sucker_y + self.sucker_t*isaac.map.mid_y) - isaac.dir_y*5
+            self.sucker_x = ((1-self.sucker_t)*self.sucker_x + self.sucker_t*playstate.player.mid_x) - playstate.player.dir_x*5
+            self.sucker_y = ((1-self.sucker_t)*self.sucker_y + self.sucker_t*playstate.player.mid_y) - playstate.player.dir_y*5
             #if self.sucker_t > 1.0:
 
 
@@ -79,24 +80,24 @@ class Sucker:
 
 monster = None
 
-def enter():
-    global monster
-    # 현재 10개체 생성 난이도 상승시 개체수 상승 난이도 상승을 개채를 더할것인지 랜덤 범위를 줄일것인지
-    monster = [Sucker() for i in range(5)]
-
-def exit():
-    global monster
-    del monster
-def update():
-    global monster
-    for sucker in monster:
-        sucker.respawn_sucker()
-        sucker.update()
-def draw():
-    global monster
-    for sucker in monster:
-        sucker.draw()
-
+# def enter():
+#     global monster
+#     # 현재 10개체 생성 난이도 상승시 개체수 상승 난이도 상승을 개채를 더할것인지 랜덤 범위를 줄일것인지
+#     monster = [Sucker() for i in range(5)]
+#
+# def exit():
+#     global monster
+#     del monster
+# def update():
+#     global monster
+#     for sucker in monster:
+#         sucker.respawn_sucker()
+#         sucker.update()
+# def draw():
+#     global monster
+#     for sucker in monster:
+#         sucker.draw()
+#
 
 
 
