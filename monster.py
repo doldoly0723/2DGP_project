@@ -26,7 +26,7 @@ class Sucker:
     def respawn_sucker(self):
         if self.sucker_status == False:
             Sucker.__init__(self); # 초기화
-        if 1 == random.randint(0, 1000): #랜덤한 시간으로 몬스터를 생성 난이도 상승시 범위도 같이 높여야 한다
+        if 1 == random.randint(0, 500): #랜덤한 시간으로 몬스터를 생성 난이도 상승시 범위도 같이 높여야 한다
             if self.sucker_status == False:
                 self.choose_wall = random.randint(0, 5)
                 #self.sucker_status = 1
@@ -46,12 +46,14 @@ class Sucker:
                     self.sucker_x = isaac.MAP_WIDTH
                     self.sucker_y = random.randint(0,isaac.MAP_HEIGHT)
                 self.sucker_status = True
+                print(self.sucker_x)
         # self.sucker_x = 0
         # self.sucker_y = 0
 
         pass
 
     def update(self):
+        Sucker.respawn_sucker(self)
         if self.sucker_status == True:
             self.sucker_t += 0.00001
             self.sucker_x = ((1-self.sucker_t)*self.sucker_x + self.sucker_t*playstate.player.mid_x) - playstate.player.dir_x*5

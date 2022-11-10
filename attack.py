@@ -2,6 +2,7 @@ from pico2d import*
 import isaac
 import monster
 import playstate
+import game_world
 
 # 화면 크기
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
@@ -75,25 +76,47 @@ class Attack():
                     elif body_dir == 2 or body_dir == 6: #공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
                         self.attack_x -= playstate.player.dir_x*4
 
-        for i in playstate.suckers:   # 공격 구체와 몬스터 접촉
-            if i.sucker_x - 40 <= self.attack_x <= i.sucker_x + 40:
-                if i.sucker_y - 40 <= self.attack_y <= i.sucker_y + 40:
+        # for i in playstate.suckers:   # 공격 구체와 몬스터 접촉
+        #     if i.sucker_x - 40 <= self.attack_x <= i.sucker_x + 40:
+        #         if i.sucker_y - 40 <= self.attack_y <= i.sucker_y + 40:
+        #
+        #             print(len(playstate.tears))
+        #             print('총 공격 수, 현재 구체 넘버 ', attack_cnt, self.attack_num)
+        #             del playstate.tears[self.attack_num]
+        #
+        #             self.Num_tear = self.attack_num         #2연속 구체 공격시 2번째 삭제 오류
+        #             for j in playstate.tears:
+        #                 if j.attack_num > self.Num_tear:
+        #                     j.attack_num -= 1
+        #
+        #             attack_cnt -= 1
+        #             print('공격 전 체력: ', i.sucker_hp)
+        #             playstate.suckers.sucker_hp -= 100
+        #             print('공격 후 체력: ', i.sucker_hp)
+        #             if i.sucker_hp <= 0:
+        #                 i.sucker_status = False
+        print('start')
+        for game_object in game_world.all_objects():
+            if game_object != playstate.player:
+                print('s')
+                if game_object.sucker_x - 40 <= self.attack_x <= game_object.sucker_x + 40:
+                    if game_object.sucker_y - 40 <= self.attack_y <= game_object.sucker_y + 40:
+                        print('a')
+                        print(len(playstate.tears))
+                        print('총 공격 수, 현재 구체 넘버 ', attack_cnt, self.attack_num)
+                        del playstate.tears[self.attack_num]
 
-                    print(len(playstate.tears))
-                    print('총 공격 수, 현재 구체 넘버 ', attack_cnt, self.attack_num)
-                    del playstate.tears[self.attack_num]
+                        self.Num_tear = self.attack_num         #2연속 구체 공격시 2번째 삭제 오류
+                        for j in playstate.tears:
+                            if j.attack_num > self.Num_tear:
+                                j.attack_num -= 1
 
-                    self.Num_tear = self.attack_num         #2연속 구체 공격시 2번째 삭제 오류
-                    for j in playstate.tears:
-                        if j.attack_num > self.Num_tear:
-                            j.attack_num -= 1
-
-                    attack_cnt -= 1
-                    print('공격 전 체력: ', i.sucker_hp)
-                    i.sucker_hp -= 100
-                    print('공격 후 체력: ', i.sucker_hp)
-                    if i.sucker_hp <= 0:
-                        i.sucker_status = False
+                        attack_cnt -= 1
+                        print('공격 전 체력: ', game_object.sucker_hp)
+                        game_object.sucker_hp -= 100
+                        print('공격 후 체력: ', game_object.sucker_hp)
+                        if game_object.sucker_hp <= 0:
+                            game_object.sucker_status = False
 
         # if monster.Sucker().sucker_x-40 <= self.attack_x <= monster.Sucker().sucker_x+40:
         #     if monster.Sucker().sucker_y-40 <= self.attack_y <= monster.Sucker().sucker_y+40:

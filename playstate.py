@@ -1,6 +1,8 @@
 from pico2d import*
 import game_framework
 import isaac
+import game_world
+import monster
 
 from isaac import Player
 from monster import Sucker
@@ -24,9 +26,18 @@ def handle_events():
 def enter():
     global player, suckers, tears
     player = Player()
-    suckers = [Sucker() for i in range(5)]
+    #suckers = Sucker()
     tears = [Attack()]
+
+    game_world.add_object(player, 0)
+    #suckers = [Sucker() for i in range(5)]
+    for i in range(5):
+        suckers = Sucker()
+        game_world.add_object(suckers, 1)
+    # for i in range(5):
+    #     game_world.add_object(suckers, 1)
     #isaac.enter()
+
 
 def exit():
     global player, suckers, tears
@@ -36,20 +47,30 @@ def exit():
 
 def update():
     global player, suckers, tears
-    player.update()
+    for game_object in game_world.all_objects():
+        game_object.update()
+
+    # print('start')
+    # for game_object in game_world.all_objects():
+    #     print(game_object)
+    # print('end')
+
+    # player.update()
     for tear in tears:
         tear.update()
-    for sucker in suckers:
-        sucker.respawn_sucker()
-        sucker.update()
+    # for sucker in suckers:
+    #     sucker.respawn_sucker()
+    #     sucker.update()
 
 def draw_world():
+    for game_object in game_world.all_objects():
+        game_object.draw()
     global player, suckers, tears
-    player.draw()
+    # player.draw()
     for tear in tears:
         tear.draw()
-    for sucker in suckers:
-        sucker.draw()
+    # for sucker in suckers:
+    #     sucker.draw()
     delay(0.01)
 
 def draw():

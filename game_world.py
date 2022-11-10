@@ -1,6 +1,6 @@
 # object[0] : 바닥 계층
 # object[1] : 상위 계층
-objects = [[], [], []]
+objects = [[], []]
 
 def add_object(o, depth):
     objects[depth].append(o)
