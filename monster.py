@@ -25,7 +25,7 @@ class Sucker:
 
     def respawn_sucker(self):
         if self.sucker_status == False:
-            Sucker.__init__(self); # 초기화
+            Sucker.__init__(self) # 초기화
         if 1 == random.randint(0, 500): #랜덤한 시간으로 몬스터를 생성 난이도 상승시 범위도 같이 높여야 한다
             if self.sucker_status == False:
                 self.choose_wall = random.randint(0, 5)
@@ -79,6 +79,7 @@ class Sucker:
 
     def take_damage(self):
         pass
+
 
 monster = None
 

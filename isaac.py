@@ -1,5 +1,6 @@
 from pico2d import*
 import attack
+import game_world
 import monster
 import playstate
 
@@ -86,22 +87,30 @@ class MOVE_ATTACK:
             self.frame_head = 4
             attack.attack_on = True
             attack.attack_cnt += 1
-            playstate.tears += [attack.Attack()]
+            playstate.tears = attack.Attack()
+            game_world.add_object(playstate.tears, 2)
+            #playstate.tears += [attack.Attack()]
         elif event == DOWN_D:
             self.frame_head = 0
             attack.attack_on = True
             attack.attack_cnt += 1
-            playstate.tears += [attack.Attack()]
+            playstate.tears = attack.Attack()
+            game_world.add_object(playstate.tears, 2)
+            #playstate.tears += [attack.Attack()]
         elif event == LEFT_D:
             self.frame_head = 6
             attack.attack_on = True
             attack.attack_cnt += 1
-            playstate.tears += [attack.Attack()]
+            playstate.tears = attack.Attack()
+            game_world.add_object(playstate.tears, 2)
+            #playstate.tears += [attack.Attack()]
         elif event == RIGHT_D:
             self.frame_head = 2
             attack.attack_on = True
             attack.attack_cnt += 1
-            playstate.tears += [attack.Attack()]
+            playstate.tears = attack.Attack()
+            game_world.add_object(playstate.tears, 2)
+            #playstate.tears += [attack.Attack()]
         if event == WU:
             self.dir_y -= 1
         elif event == SU:
@@ -273,6 +282,7 @@ class Player:
         # # 머리
         # self.image_isaac.clip_draw((frame_head+self.head_frame)*self.head_WID+self.head_x, self.head_y, self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
         # pass
+
 
 # 캐릭터 이동 및 공격 키 입력
 # def handle_events():

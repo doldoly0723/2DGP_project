@@ -1,9 +1,12 @@
 # object[0] : 바닥 계층
 # object[1] : 상위 계층
-objects = [[], []]
+objects = [[], [], []]
 
 def add_object(o, depth):
     objects[depth].append(o)
+
+def add_objects(ol, depth):
+    objects[depth] += ol
 
 def remove_object(o):
     for layer in objects:
@@ -17,6 +20,11 @@ def all_objects():
     for layer in objects:
         for o in layer:
             yield o # 제러레이터, 모든 객체들을 하나씩 넘겨준다.
+
+
+def second_objects():
+    for o in objects[1][:]:
+        yield o
 
 def clear():
     for o in all_objects():
