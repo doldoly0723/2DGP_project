@@ -33,6 +33,7 @@ def enter():
     suckers = [Sucker() for i in range(5)]
     game_world.add_objects(suckers, 1)
 
+    
 
 def exit():
     global player, suckers, tears
