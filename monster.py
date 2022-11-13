@@ -23,7 +23,7 @@ class Sucker:
 
         self.choose_wall = 0 # 리스폰 지역 설정
 
-        self.monster_hp = 100
+        self.monster_hp = 200
         pass
 
     def respawn_sucker(self):
@@ -37,17 +37,17 @@ class Sucker:
                 self.monster_hp = 200
                 self.monster_t = 0
                 if self.choose_wall == 1:   #밑에 지역
-                    self.monster_x = random.randint(0,isaac.MAP_WIDTH)
+                    self.monster_x = random.randint(0, MAP_WIDTH)
                     self.monster_y = 0
                 elif self.choose_wall == 2: #위 지역
-                    self.monster_x = random.randint(0,isaac.MAP_WIDTH)
-                    self.monster_y = isaac.MAP_HEIGHT
+                    self.monster_x = random.randint(0, MAP_WIDTH)
+                    self.monster_y = MAP_HEIGHT
                 elif self.choose_wall == 3: #왼쪽
                     self.monster_x = 0
-                    self.monster_y = random.randint(0,isaac.MAP_HEIGHT)
+                    self.monster_y = random.randint(0, MAP_HEIGHT)
                 elif self.choose_wall == 4: #오른쪽
-                    self.monster_x = isaac.MAP_WIDTH
-                    self.monster_y = random.randint(0,isaac.MAP_HEIGHT)
+                    self.monster_x = MAP_WIDTH
+                    self.monster_y = random.randint(0, MAP_HEIGHT)
                 self.monster_status = True
         # self.sucker_x = 0
         # self.sucker_y = 0
@@ -58,10 +58,15 @@ class Sucker:
         Sucker.respawn_sucker(self)
         if self.monster_status == True:
             self.monster_t += 0.00001
-            self.monster_x = ((1-self.monster_t)*self.monster_x + self.monster_t*playstate.player.mid_x) - playstate.player.dir_x*5
-            self.monster_y = ((1-self.monster_t)*self.monster_y + self.monster_t*playstate.player.mid_y) - playstate.player.dir_y*5
-            #if self.sucker_t > 1.0:
+            if playstate.player.map_x == playstate.player.end_of_left or playstate.player.map_x == playstate.player.end_of_right:
+                self.monster_x = ((1 - self.monster_t) * self.monster_x + self.monster_t * playstate.player.mid_x)
+            else:
+                self.monster_x = ((1-self.monster_t)*self.monster_x + self.monster_t*playstate.player.mid_x) - playstate.player.dir_x*5
 
+            if playstate.player.map_y == playstate.player.end_of_top or playstate.player.map_y == playstate.player.end_of_bottom:
+                self.monster_y = ((1 - self.monster_t) * self.monster_y + self.monster_t * playstate.player.mid_y)
+            else:
+                self.monster_y = ((1-self.monster_t)*self.monster_y + self.monster_t*playstate.player.mid_y) - playstate.player.dir_y*5
 
         self.frame_count += 1
         if self.frame_count == 10:

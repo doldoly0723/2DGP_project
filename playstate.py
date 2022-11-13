@@ -7,11 +7,13 @@ import monster
 from isaac import Player
 from monster import Sucker
 from attack import Attack
+from monster2 import Spitty
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 
 player = None
 suckers = None
 tears = None
+spittys = None
 
 def handle_events():
     events = get_events()
@@ -24,7 +26,7 @@ def handle_events():
             player.handle_event(event)
 
 def enter():
-    global player, suckers, tears
+    global player, suckers, tears, spittys
     player = Player()
     tears = Attack()
 
@@ -33,16 +35,14 @@ def enter():
     suckers = [Sucker() for i in range(5)]
     game_world.add_objects(suckers, 1)
 
-    
+    spittys = [Spitty() for i in range(5)]
+    game_world.add_objects(spittys, 1)
+
 
 def exit():
-    global player, suckers, tears
-    del player
-    del suckers
-    del tears
+    game_world.clear()
 
 def update():
-    global player, suckers, tears
     for game_object in game_world.all_objects():
         game_object.update()
 

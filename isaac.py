@@ -273,6 +273,7 @@ class Player:
 
     def draw(self):
         self.cur_state.draw(self)
+
         # self.image_map.clip_draw(self.map_x,self.map_y,MAP_WIDTH,MAP_HEIGHT,self.mid_x,self.mid_y)
         # # 몸
         # if(frame_body_reverse == 0):
