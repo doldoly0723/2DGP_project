@@ -32,10 +32,10 @@ def enter():
 
     game_world.add_object(player, 0)
 
-    suckers = [Sucker() for i in range(5)]
-    game_world.add_objects(suckers, 1)
+    # suckers = [Sucker() for i in range(5)]
+    # game_world.add_objects(suckers, 1)
 
-    spittys = [Spitty() for i in range(5)]
+    spittys = [Spitty() for i in range(3)]
     game_world.add_objects(spittys, 1)
 
 

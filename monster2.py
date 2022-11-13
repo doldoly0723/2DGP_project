@@ -28,6 +28,13 @@ class Spitty:
 
         self.monster_size = 50
 
+        self.mid_x = MAP_WIDTH // 2
+        self.mid_y = MAP_HEIGHT // 2
+        self.end_of_left = 65
+        self.end_of_right = 4800
+        self.end_of_top = 2725
+        self.end_of_bottom = 0
+
     def respawn_monster(self):
         if self.monster_status == False:
             Spitty.__init__(self) # 초기화
@@ -57,12 +64,12 @@ class Spitty:
         pass
 
     def monster_player_compare_x(self):
-        if playstate.player.map_x == playstate.player.end_of_left or playstate.player.map_x == playstate.player.end_of_right:
+        if playstate.player.map_x == self.end_of_left or playstate.player.map_x == self.end_of_right:
             return 1    # 테두리에 있을때
         else:
             return 2
     def monster_player_compare_y(self):
-        if playstate.player.map_y == playstate.player.end_of_top or playstate.player.map_y == playstate.player.end_of_bottom:
+        if playstate.player.map_y == self.end_of_top or playstate.player.map_y == self.end_of_bottom:
             return 1    # 테두리에 있을 떄
         else:
             return 2
@@ -71,60 +78,73 @@ class Spitty:
         Spitty.respawn_monster(self)
         if self.monster_status == True:
 
-            self.compare_x = self.monster_x - playstate.player.mid_x
-            self.compare_y = self.monster_y - playstate.player.mid_y
+            self.compare_x = self.monster_x - self.mid_x
+            self.compare_y = self.monster_y - self.mid_y
             #몬스터는 x or y축 방향으로만 이동 가능
-            if self.compare_x > 0 and self.compare_y > 0:   # 1사분면
+            if self.compare_x >= 0 and self.compare_y >= 0:   # 1사분면
+                print('1')
                 if self.compare_x >= self.compare_y:
-                    if Spitty.monster_player_compare_x == 1:
+                    if self.monster_player_compare_x() == 1:
                         self.monster_x = self.monster_x - 2
-                    elif Spitty.monster_player_compare_x == 2:
-                        self.monster_x = self.monster_x - 2 + playstate.player.dir_x * 5
-                else:
-                    if Spitty.monster_player_compare_y == 1:
-                        self.monster_y = self.monster_y - 2
-                    elif Spitty.monster_player_compare_y == 2:
-                        self.monster_y = self.monster_y - 2 + playstate.player.dir_y * 5
+                    elif self.monster_player_compare_x() == 2:
+                        self.monster_x = (self.monster_x - 2) - playstate.player.dir_x * 5
+                        self.monster_y = self.monster_y - playstate.player.dir_y * 5
 
-            elif self.compare_x > 0 and self.compare_y < 0: # 4사분면
+                else:
+                    if self.monster_player_compare_y() == 1:
+                        self.monster_y = self.monster_y - 2
+                    elif self.monster_player_compare_y() == 2:
+                        self.monster_y = self.monster_y - 2 - playstate.player.dir_y * 5
+                        self.monster_x = self.monster_x - playstate.player.dir_x * 5
+
+
+            elif self.compare_x >= 0 and self.compare_y <= 0: # 4사분면
+                print('4')
                 if abs(self.compare_x) >= abs(self.compare_y):
-                    if Spitty.monster_player_compare_x == 1:
+                    if self.monster_player_compare_x() == 1:
                         self.monster_x = self.monster_x - 2
-                    elif Spitty.monster_player_compare_x == 2:
-                        self.monster_x = self.monster_x - 2 + playstate.player.dir_x * 5
+                    elif self.monster_player_compare_x() == 2:
+                        self.monster_x = self.monster_x - 2 - playstate.player.dir_x * 5
+                        self.monster_y = self.monster_y - playstate.player.dir_y * 5
                 else:
-                    if Spitty.monster_player_compare_y == 1:
+                    if self.monster_player_compare_y() == 1:
                         self.monster_y = self.monster_y + 2
-                    elif Spitty.monster_player_compare_y == 2:
+                    elif self.monster_player_compare_y() == 2:
                         self.monster_y = self.monster_y + 2 - playstate.player.dir_y * 5
+                        self.monster_x = self.monster_x - playstate.player.dir_x * 5
 
-            elif self.compare_x < 0 and self.compare_y < 0: # 3사분면
+            elif self.compare_x <= 0 and self.compare_y <= 0: # 3사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
-                    if Spitty.monster_player_compare_x == 1:
+                    if self.monster_player_compare_x() == 1:
                         self.monster_x = self.monster_x + 2
-                    elif Spitty.monster_player_compare_x == 2:
-                        self.monster_x = self.monster_x + 2 - playstate.player.dir_x * 5
+                    elif self.monster_player_compare_x() == 2:
+                        self.monster_x = (self.monster_x + 2) - playstate.player.dir_x * 5
+                        self.monster_y = self.monster_y - playstate.player.dir_y * 5
                 else:
-                    if Spitty.monster_player_compare_y == 1:
+                    if self.monster_player_compare_y() == 1:
                         self.monster_y = self.monster_y + 2
-                    elif Spitty.monster_player_compare_y == 2:
-                        self.monster_y = self.monster_y + 2 - playstate.player.dir_y * 5
+                    elif self.monster_player_compare_y() == 2:
+                        self.monster_y = (self.monster_y + 2) - playstate.player.dir_y * 5
+                        self.monster_x = self.monster_x - playstate.player.dir_x * 5
 
-            elif self.compare_x < 0 and self.compare_y > 0: # 2사분면
+            elif self.compare_x <= 0 and self.compare_y >= 0: # 2사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
-                    if Spitty.monster_player_compare_x == 1:
+                    if self.monster_player_compare_x() == 1:
                         self.monster_x = self.monster_x + 2
-                    elif Spitty.monster_player_compare_x == 2:
+                    elif self.monster_player_compare_x() == 2:
                         self.monster_x = self.monster_x + 2 - playstate.player.dir_x * 5
+                        self.monster_y = self.monster_y - playstate.player.dir_y * 5
+
                 else:
-                    if Spitty.monster_player_compare_y == 1:
+                    if self.monster_player_compare_y() == 1:
                         self.monster_y = self.monster_y - 2
-                    elif Spitty.monster_player_compare_y == 2:
-                        self.monster_y = self.monster_y - 2 + playstate.player.dir_y * 5
+                    elif self.monster_player_compare_y() == 2:
+                        self.monster_y = self.monster_y - 2 - playstate.player.dir_y * 5
+                        self.monster_x = self.monster_x - playstate.player.dir_x * 5
+
             # self.monster_x = ((1-self.monster_t)*self.monster_x + self.monster_t*playstate.player.mid_x) - playstate.player.dir_x*5
             # self.monster_y = ((1-self.monster_t)*self.monster_y + self.monster_t*playstate.player.mid_y) - playstate.player.dir_y*5
             #if self.sucker_t > 1.0:
-
 
 
         # 프레임 속도
@@ -135,20 +155,19 @@ class Spitty:
 
     def draw(self):
         if self.monster_status == True:
+            self.compare_x = self.monster_x - self.mid_x
+            self.compare_y = self.monster_y - self.mid_y
 
-            self.compare_x = self.monster_x - playstate.player.mid_x
-            self.compare_y = self.monster_y - playstate.player.mid_y
-
-            if self.compare_x > 0 and self.compare_y > 0:  # 1사분면
+            if self.compare_x >= 0 and self.compare_y >= 0:  # 1사분면
                 if self.compare_x >= self.compare_y:
-                    self.monster_image.clip_composite_draw(self.monster_frame*64, 64*3, self.monster_WID, self.monster_HEI,
+                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64*3, self.monster_WID, self.monster_HEI,
                                                            0, 'v', self.monster_x, self.monster_y, self.monster_size, self.monster_size)
                 else:
                     self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 1, self.monster_WID,
                                                            self.monster_HEI,
                                                            0, '', self.monster_x, self.monster_y, self.monster_size, self.monster_size)
 
-            elif self.compare_x > 0 and self.compare_y < 0:  # 4사분면
+            elif self.compare_x >= 0 and self.compare_y <= 0:  # 4사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID,
                                                            self.monster_HEI,
@@ -160,7 +179,7 @@ class Spitty:
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
 
-            elif self.compare_x < 0 and self.compare_y < 0:  # 3사분면
+            elif self.compare_x <= 0 and self.compare_y <= 0:  # 3사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID,
                                                            self.monster_HEI,
@@ -172,7 +191,7 @@ class Spitty:
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
 
-            elif self.compare_x < 0 and self.compare_y > 0:  # 2사분면
+            elif self.compare_x <= 0 and self.compare_y >= 0:  # 2사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID,
                                                            self.monster_HEI,

@@ -156,3 +156,5 @@ tears += [Attack()] 여기서 렉 발생 -> 수정 완료
 새 객체 Spitty	256x256
 frame_WID = 64
 frame_HEI = 64
+
+이동키 눌렀을 때 몬스터 y값이 변동없음 수정 필요
