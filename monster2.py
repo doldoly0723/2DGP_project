@@ -26,7 +26,7 @@ class Spitty:
         self.compare_x = 0
         self.compare_y = 0
 
-        self.monster_size = 50
+        self.monster_size = 100
 
         self.mid_x = MAP_WIDTH // 2
         self.mid_y = MAP_HEIGHT // 2
@@ -82,7 +82,6 @@ class Spitty:
             self.compare_y = self.monster_y - self.mid_y
             #몬스터는 x or y축 방향으로만 이동 가능
             if self.compare_x >= 0 and self.compare_y >= 0:   # 1사분면
-                print('1')
                 if self.compare_x >= self.compare_y:
                     if self.monster_player_compare_x() == 1:
                         self.monster_x = self.monster_x - 2
@@ -99,7 +98,6 @@ class Spitty:
 
 
             elif self.compare_x >= 0 and self.compare_y <= 0: # 4사분면
-                print('4')
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
                         self.monster_x = self.monster_x - 2
@@ -160,8 +158,8 @@ class Spitty:
 
             if self.compare_x >= 0 and self.compare_y >= 0:  # 1사분면
                 if self.compare_x >= self.compare_y:
-                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64*3, self.monster_WID, self.monster_HEI,
-                                                           0, 'v', self.monster_x, self.monster_y, self.monster_size, self.monster_size)
+                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID, self.monster_HEI,
+                                                           3.141592, 'v', self.monster_x, self.monster_y, self.monster_size, self.monster_size)
                 else:
                     self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 1, self.monster_WID,
                                                            self.monster_HEI,
@@ -171,7 +169,7 @@ class Spitty:
                 if abs(self.compare_x) >= abs(self.compare_y):
                     self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID,
                                                            self.monster_HEI,
-                                                           0, 'v', self.monster_x, self.monster_y, self.monster_size,
+                                                           3.141592, 'v', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
                 else:
                     self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 2, self.monster_WID,
@@ -202,7 +200,7 @@ class Spitty:
                                                            self.monster_HEI,
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
-
+        draw_rectangle(*self.get_bb())
             # if self.monster_x <= playstate.player.mid_x: # sucker 스프라이트 좌우 방향
             #     self.monster_image.clip_draw(self.monster_frame*80, 0,
             #                             self.monster_WID, self.monster_HEI, self.monster_x, self.monster_y)
@@ -211,9 +209,14 @@ class Spitty:
             #                                 self.monster_WID, self.monster_HEI, self.monster_x, self.monster_y)
 
 
-    def take_damage(self):
-        pass
+    def get_bb(self):
+        return self.monster_x - 32, self.monster_y - 22, self.monster_x + 32, self.monster_y + 22
 
+    def handle_collision(self, other, group):
+        if group == 'tears:spittys':
+            self.monster_hp -= 100
+            if self.monster_hp <= 0:
+                self.monster_status = False
 
 monster = None
 

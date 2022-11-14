@@ -99,27 +99,27 @@ class Attack():
         #             if i.sucker_hp <= 0:
         #                 i.sucker_status = False
         # print('start')
-        print('start')
-        for game_object in game_world.second_objects():
-            #if game_object == game_world.objects[1][:]:     # 게임오브젝트들 중 플레이어 객체가 아닐 떄
-            if game_object.monster_x - 40 <= self.attack_x <= game_object.monster_x + 40:
-                if game_object.monster_y - 40 <= self.attack_y <= game_object.monster_y + 40:
-                    # print(len(playstate.tears))
-                    # print('총 공격 수, 현재 구체 넘버 ', attack_cnt, self.attack_num)
-                    #del playstate.tears[self.attack_num]
-                    game_world.remove_object(self)
 
-                    # self.Num_tear = self.attack_num         #2연속 구체 공격시 2번째 삭제 오류
-                    # for j in playstate.tears:
-                    #     if j.attack_num > self.Num_tear:
-                    #         j.attack_num -= 1
-
-                    attack_cnt -= 1
-                    print('공격 전 체력: ', game_object.monster_hp)
-                    game_object.monster_hp -= 100
-                    print('공격 후 체력: ', game_object.monster_hp)
-                    if game_object.monster_hp <= 0:
-                        game_object.monster_status = False
+        # for game_object in game_world.second_objects():
+        #     #if game_object == game_world.objects[1][:]:     # 게임오브젝트들 중 플레이어 객체가 아닐 떄
+        #     if game_object.monster_x - 40 <= self.attack_x <= game_object.monster_x + 40:
+        #         if game_object.monster_y - 40 <= self.attack_y <= game_object.monster_y + 40:
+        #             # print(len(playstate.tears))
+        #             # print('총 공격 수, 현재 구체 넘버 ', attack_cnt, self.attack_num)
+        #             #del playstate.tears[self.attack_num]
+        #             game_world.remove_object(self)
+        #
+        #             # self.Num_tear = self.attack_num         #2연속 구체 공격시 2번째 삭제 오류
+        #             # for j in playstate.tears:
+        #             #     if j.attack_num > self.Num_tear:
+        #             #         j.attack_num -= 1
+        #
+        #             attack_cnt -= 1
+        #             print('공격 전 체력: ', game_object.monster_hp)
+        #             game_object.monster_hp -= 100
+        #             print('공격 후 체력: ', game_object.monster_hp)
+        #             if game_object.monster_hp <= 0:
+        #                 game_object.monster_status = False
 
         # if monster.Sucker().sucker_x-40 <= self.attack_x <= monster.Sucker().sucker_x+40:
         #     if monster.Sucker().sucker_y-40 <= self.attack_y <= monster.Sucker().sucker_y+40:
@@ -130,10 +130,15 @@ class Attack():
             if self.attack_status == True:
                 self.image_attack.clip_draw(self.frame_x, self.frame_y,
                                         self.attack_WID, self.attack_HEI, self.attack_x, self.attack_y)
+            draw_rectangle(*self.get_bb())
+    def get_bb(self):
+        return self.attack_x - 21, self.attack_y - 23, self.attack_x + 21, self.attack_y + 23
 
-
-
-
+    def handle_collision(self, other, group):
+        global attack_cnt
+        if group == 'tears:suckers' or group == 'tears:spittys':
+            attack_cnt -= 1
+            game_world.remove_object(self)
 attack_on = False
 body_dir = 0
 attack_cnt = 0  # 공격 횟수

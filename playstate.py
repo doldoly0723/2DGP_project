@@ -32,12 +32,14 @@ def enter():
 
     game_world.add_object(player, 0)
 
-    # suckers = [Sucker() for i in range(5)]
-    # game_world.add_objects(suckers, 1)
+    suckers = [Sucker() for i in range(3)]
+    game_world.add_objects(suckers, 1)
 
     spittys = [Spitty() for i in range(3)]
     game_world.add_objects(spittys, 1)
 
+    game_world.add_collision_pairs(tears, suckers, 'tears:suckers')
+    game_world.add_collision_pairs(tears, spittys, 'tears:spittys')
 
 def exit():
     game_world.clear()
@@ -45,7 +47,12 @@ def exit():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
+    for a, b, group in game_world.all_collision_pairs():
+        if collide(a, b):
 
+            print('COLLISION', group)
+            a.handle_collision(b, group)
+            b.handle_collision(a, group)
     # print('start')
     # for game_object in game_world.all_objects():
     #     print(game_object)
@@ -80,4 +87,13 @@ def pause():
 def resume():
     pass
 
+def collide(a, b):
+    la, ba, ra, ta = a.get_bb()
+    lb, bb, rb, tb = b.get_bb()
 
+    if la > rb: return False
+    if ra < lb: return False
+    if ta < bb: return False
+    if ba > tb: return False
+
+    return True

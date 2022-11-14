@@ -82,11 +82,16 @@ class Sucker:
             else:
                 self.sucker_reverse_image.clip_draw(self.monster_frame * 80, 0,
                                             self.monster_WID, self.monster_HEI, self.monster_x, self.monster_y)
-        pass
+            draw_rectangle(*self.get_bb())
 
-    def take_damage(self):
-        pass
+    def get_bb(self):
+        return self.monster_x - 30, self.monster_y - 40, self.monster_x + 30, self.monster_y + 30
 
+    def handle_collision(self, other, group):
+        if group == 'tears:suckers':
+            self.monster_hp -= 100
+            if self.monster_hp <= 0:
+                self.monster_status = False
 
 monster = None
 

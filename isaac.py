@@ -89,6 +89,8 @@ class MOVE_ATTACK:
             attack.attack_cnt += 1
             playstate.tears = attack.Attack()
             game_world.add_object(playstate.tears, 2)
+            game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
+            game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
             #playstate.tears += [attack.Attack()]
         elif event == DOWN_D:
             self.frame_head = 0
@@ -96,6 +98,8 @@ class MOVE_ATTACK:
             attack.attack_cnt += 1
             playstate.tears = attack.Attack()
             game_world.add_object(playstate.tears, 2)
+            game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
+            game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
             #playstate.tears += [attack.Attack()]
         elif event == LEFT_D:
             self.frame_head = 6
@@ -103,6 +107,8 @@ class MOVE_ATTACK:
             attack.attack_cnt += 1
             playstate.tears = attack.Attack()
             game_world.add_object(playstate.tears, 2)
+            game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
+            game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
             #playstate.tears += [attack.Attack()]
         elif event == RIGHT_D:
             self.frame_head = 2
@@ -110,6 +116,8 @@ class MOVE_ATTACK:
             attack.attack_cnt += 1
             playstate.tears = attack.Attack()
             game_world.add_object(playstate.tears, 2)
+            game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
+            game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
             #playstate.tears += [attack.Attack()]
         if event == WU:
             self.dir_y -= 1
@@ -273,7 +281,7 @@ class Player:
 
     def draw(self):
         self.cur_state.draw(self)
-
+        draw_rectangle(*self.get_bb())
         # self.image_map.clip_draw(self.map_x,self.map_y,MAP_WIDTH,MAP_HEIGHT,self.mid_x,self.mid_y)
         # # 몸
         # if(frame_body_reverse == 0):
@@ -283,7 +291,8 @@ class Player:
         # # 머리
         # self.image_isaac.clip_draw((frame_head+self.head_frame)*self.head_WID+self.head_x, self.head_y, self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
         # pass
-
+    def get_bb(self):
+        return self.mid_x - 50, self.mid_y - 70, self.mid_x + 40, self.mid_y + 40
 
 # 캐릭터 이동 및 공격 키 입력
 # def handle_events():
