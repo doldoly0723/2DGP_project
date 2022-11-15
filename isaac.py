@@ -166,6 +166,8 @@ class MOVE_ATTACK:
         # 머리
         self.image_isaac.clip_draw((self.frame_head + self.head_frame) * self.head_WID + self.head_x, self.head_y,
                                    self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
+        for i in range(self.HP):
+            self.image_heart.clip_draw(0, 0, 30, 28, 50 + i*30, 850)
 
 class INJURY:
     def enter(self, event):
@@ -204,6 +206,9 @@ class INJURY:
         self.image_map.clip_draw(self.map_x, self.map_y, MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
         self.image_isaac.clip_draw(30, 45, 90, 105, self.mid_x, self.mid_y)
 
+        for i in range(self.HP):
+            self.image_heart.clip_draw(0, 0, 30, 28, 50 + i*30, 850)
+
 next_state = {
     MOVE_ATTACK: {WU: MOVE_ATTACK, SU: MOVE_ATTACK, AU: MOVE_ATTACK, DU: MOVE_ATTACK,
                   WD: MOVE_ATTACK, SD: MOVE_ATTACK, AD: MOVE_ATTACK, DD: MOVE_ATTACK,
@@ -236,7 +241,7 @@ class Player:
         self.image_map = load_image('map.png')
         self.image_isaac = load_image('isaac.png')
         self.image_isaac_reverse = load_image('isaac_reverse.png')
-
+        self.image_heart = load_image('heart.png')
 
         self.mid_x = MAP_WIDTH // 2
         self.mid_y = MAP_HEIGHT // 2
