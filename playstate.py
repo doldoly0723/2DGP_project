@@ -28,7 +28,7 @@ def handle_events():
 def enter():
     global player, suckers, tears, spittys
     player = Player()
-    tears = Attack()
+    #tears = Attack()
 
     game_world.add_object(player, 0)
 
@@ -38,8 +38,13 @@ def enter():
     spittys = [Spitty() for i in range(3)]
     game_world.add_objects(spittys, 1)
 
-    game_world.add_collision_pairs(tears, suckers, 'tears:suckers')
-    game_world.add_collision_pairs(tears, spittys, 'tears:spittys')
+    # 몬스터와 공격 충돌체크
+    game_world.add_collision_pairs(None, suckers, 'tears:suckers')
+    game_world.add_collision_pairs(None, spittys, 'tears:spittys')
+
+    #몬스터와 캐릭터 충돌 체크
+    game_world.add_collision_pairs(player, suckers, 'player:suckers')
+    game_world.add_collision_pairs(player, spittys, 'player:spittys')
 
 def exit():
     game_world.clear()

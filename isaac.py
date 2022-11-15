@@ -4,7 +4,7 @@ import game_world
 import monster
 import playstate
 
-WD, SD, AD, DD, UP_D, DOWN_D, RIGHT_D, LEFT_D, WU, SU, AU, DU, UP_U, DOWN_U, RIGHT_U, LEFT_U = range(16) # 키
+WD, SD, AD, DD, UP_D, DOWN_D, RIGHT_D, LEFT_D, WU, SU, AU, DU, UP_U, DOWN_U, RIGHT_U, LEFT_U, TIMER, Injury = range(18) # 키
 key_event_table = {
     (SDL_KEYDOWN, SDLK_w): WD,
     (SDL_KEYDOWN, SDLK_s): SD,
@@ -130,7 +130,7 @@ class MOVE_ATTACK:
 
     def exit(self):
         pass
-    def do(self):
+    def do(self, event):
         self.map_x += self.dir_x * 5
         self.map_y += self.dir_y * 5
         self.map_x = clamp(self.end_of_left, self.map_x, self.end_of_right)
@@ -167,15 +167,56 @@ class MOVE_ATTACK:
         self.image_isaac.clip_draw((self.frame_head + self.head_frame) * self.head_WID + self.head_x, self.head_y,
                                    self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
 
-class HEART:
-    pass
+class INJURY:
+    def enter(self, event):
+        if event == WD:
+            self.dir_y += 1
+        elif event == SD:
+            self.dir_y -= 1
+        elif event == AD:
+            self.dir_x -= 1
+        elif event == DD:
+            self.dir_x += 1
+        if event == WU:
+            self.dir_y -= 1
+        elif event == SU:
+            self.dir_y += 1
+        elif event == AU:
+            self.dir_x += 1
+        elif event == DU:
+            self.dir_x -= 1
+    def exit(self):
+        pass
+    def do(self, event):
+
+
+        self.map_x += self.dir_x * 5
+        self.map_y += self.dir_y * 5
+        self.map_x = clamp(self.end_of_left, self.map_x, self.end_of_right)
+        self.map_y = clamp(self.end_of_bottom, self.map_y, self.end_of_top)
+
+        self.timer -= 1
+        if self.timer == 0:
+            self.injury_status = False
+            self.add_event(TIMER)
+
+    def draw(self):
+        self.image_map.clip_draw(self.map_x, self.map_y, MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+        self.image_isaac.clip_draw(30, 45, 90, 105, self.mid_x, self.mid_y)
 
 next_state = {
     MOVE_ATTACK: {WU: MOVE_ATTACK, SU: MOVE_ATTACK, AU: MOVE_ATTACK, DU: MOVE_ATTACK,
                   WD: MOVE_ATTACK, SD: MOVE_ATTACK, AD: MOVE_ATTACK, DD: MOVE_ATTACK,
                   UP_U: MOVE_ATTACK, DOWN_U: MOVE_ATTACK, LEFT_U: MOVE_ATTACK, RIGHT_U: MOVE_ATTACK,
-                  UP_D: MOVE_ATTACK, DOWN_D: MOVE_ATTACK, LEFT_D: MOVE_ATTACK, RIGHT_D: MOVE_ATTACK
-                  }
+                  UP_D: MOVE_ATTACK, DOWN_D: MOVE_ATTACK, LEFT_D: MOVE_ATTACK, RIGHT_D: MOVE_ATTACK,
+                  Injury: INJURY
+                  },
+    INJURY: {TIMER: MOVE_ATTACK,
+             WU: INJURY, SU: INJURY, AU: INJURY, DU: INJURY,
+             WD: INJURY, SD: INJURY, AD: INJURY, DD: INJURY,
+             UP_U: INJURY, DOWN_U: INJURY, LEFT_U: INJURY, RIGHT_U: INJURY,
+             UP_D: INJURY, DOWN_D: INJURY, LEFT_D: INJURY, RIGHT_D: INJURY
+             }
 }
 # 화면 크기
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
@@ -236,8 +277,14 @@ class Player:
         self.cur_state = MOVE_ATTACK
         self.cur_state.enter(self, None)
 
+        self.damege = 100
+        self.HP = 5 # 체력 5칸
+        self.timer = 100 # 부상 무적 상태
+
+        self.injury_status = False
+
     def update(self):
-        self.cur_state.do(self)
+        self.cur_state.do(self, None)
 
         if self.q:
             event = self.q.pop()
@@ -293,6 +340,14 @@ class Player:
         # pass
     def get_bb(self):
         return self.mid_x - 50, self.mid_y - 70, self.mid_x + 40, self.mid_y + 40
+
+    def handle_collision(self, other, group):
+        if self.injury_status == False:
+            self.HP -= 1
+            self.timer = 150 # 무적시간
+            self.add_event(Injury)
+        else:
+            pass
 
 # 캐릭터 이동 및 공격 키 입력
 # def handle_events():

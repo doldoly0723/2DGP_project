@@ -36,6 +36,8 @@ def clear():
 
 collision_group['tears:suckers'] = [[],[]]
 collision_group['tears:spittys'] = [[],[]]
+collision_group['player:suckers'] = [[],[]]
+collision_group['player:spittys'] = [[],[]]
 def add_collision_pairs(a, b, group):
     print('add new group')
     #collision_group[group] = [[], []]  # 호출될때마다 초기화 된다

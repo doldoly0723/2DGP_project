@@ -200,7 +200,7 @@ class Spitty:
                                                            self.monster_HEI,
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
-        draw_rectangle(*self.get_bb())
+            draw_rectangle(*self.get_bb())
             # if self.monster_x <= playstate.player.mid_x: # sucker 스프라이트 좌우 방향
             #     self.monster_image.clip_draw(self.monster_frame*80, 0,
             #                             self.monster_WID, self.monster_HEI, self.monster_x, self.monster_y)
@@ -214,9 +214,30 @@ class Spitty:
 
     def handle_collision(self, other, group):
         if group == 'tears:spittys':
-            self.monster_hp -= 100
+            self.monster_hp -= playstate.player.damege
             if self.monster_hp <= 0:
                 self.monster_status = False
+
+        if group == 'player:spittys':
+            if other.injury_status == False:
+                self.monster_hp -= playstate.player.damege
+                print(self.get_bb())
+                print(other.get_bb())
+                la, ba, ra, ta = self.get_bb()
+                lb, bb, rb, tb = other.get_bb()
+
+                if la < rb and tb - ba > 5 and ta - bb > 5 and ra - lb > 5:
+                    self.monster_x += 100
+                elif ra > lb and tb - ba > 5 and ta - bb > 5 and rb - la > 5:
+                    self.monster_x -= 100
+                elif ta > bb and tb - ba > 5:
+                    self.monster_y -= 100
+                elif ba < tb:
+                    self.monster_y += 100
+
+                playstate.player.injury_status = True
+                if self.monster_hp <= 0:
+                    self.monster_status = False
 
 monster = None
 

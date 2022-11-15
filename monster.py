@@ -24,7 +24,6 @@ class Sucker:
         self.choose_wall = 0 # 리스폰 지역 설정
 
         self.monster_hp = 200
-        pass
 
     def respawn_sucker(self):
         if self.monster_status == False:
@@ -89,9 +88,30 @@ class Sucker:
 
     def handle_collision(self, other, group):
         if group == 'tears:suckers':
-            self.monster_hp -= 100
+            self.monster_hp -= playstate.player.damege
             if self.monster_hp <= 0:
                 self.monster_status = False
+        if group == 'player:suckers':
+            if other.injury_status == False:
+                self.monster_hp -= playstate.player.damege
+                print(self.get_bb())
+                print(other.get_bb())
+                la, ba, ra, ta = self.get_bb()
+                lb, bb, rb, tb = other.get_bb()
+
+                if la < rb and tb - ba > 5 and ta - bb > 5 and ra - lb > 5:
+                    self.monster_x += 100
+                elif ra > lb and tb - ba > 5 and ta - bb > 5 and rb - la > 5:
+                    self.monster_x -= 100
+                elif ta > bb and tb - ba > 5:
+                    self.monster_y -= 100
+                elif ba < tb:
+                    self.monster_y += 100
+
+                playstate.player.injury_status = True
+                if self.monster_hp <= 0:
+                    self.monster_status = False
+
 
 monster = None
 
