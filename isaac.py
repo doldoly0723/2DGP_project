@@ -85,39 +85,43 @@ class MOVE_ATTACK:
             attack.body_dir = 6  # right
         if event == UP_D:
             self.frame_head = 4
-            attack.attack_on = True
-            attack.attack_cnt += 1
-            playstate.tears = attack.Attack()
-            game_world.add_object(playstate.tears, 2)
-            game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
-            game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
+            if attack.attack_cnt < attack.attack_max:
+                attack.attack_on = True
+                attack.attack_cnt += 1
+                playstate.tears = attack.Attack()
+                game_world.add_object(playstate.tears, 2)
+                game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
+                game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
             #playstate.tears += [attack.Attack()]
         elif event == DOWN_D:
             self.frame_head = 0
-            attack.attack_on = True
-            attack.attack_cnt += 1
-            playstate.tears = attack.Attack()
-            game_world.add_object(playstate.tears, 2)
-            game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
-            game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
+            if attack.attack_cnt < attack.attack_max:
+                attack.attack_on = True
+                attack.attack_cnt += 1
+                playstate.tears = attack.Attack()
+                game_world.add_object(playstate.tears, 2)
+                game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
+                game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
             #playstate.tears += [attack.Attack()]
         elif event == LEFT_D:
             self.frame_head = 6
-            attack.attack_on = True
-            attack.attack_cnt += 1
-            playstate.tears = attack.Attack()
-            game_world.add_object(playstate.tears, 2)
-            game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
-            game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
+            if attack.attack_cnt < attack.attack_max:
+                attack.attack_on = True
+                attack.attack_cnt += 1
+                playstate.tears = attack.Attack()
+                game_world.add_object(playstate.tears, 2)
+                game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
+                game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
             #playstate.tears += [attack.Attack()]
         elif event == RIGHT_D:
             self.frame_head = 2
-            attack.attack_on = True
-            attack.attack_cnt += 1
-            playstate.tears = attack.Attack()
-            game_world.add_object(playstate.tears, 2)
-            game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
-            game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
+            if attack.attack_cnt < attack.attack_max:
+                attack.attack_on = True
+                attack.attack_cnt += 1
+                playstate.tears = attack.Attack()
+                game_world.add_object(playstate.tears, 2)
+                game_world.add_collision_pairs(playstate.tears, None, 'tears:suckers')
+                game_world.add_collision_pairs(playstate.tears, None, 'tears:spittys')
             #playstate.tears += [attack.Attack()]
         if event == WU:
             self.dir_y -= 1
@@ -169,6 +173,10 @@ class MOVE_ATTACK:
         for i in range(self.HP):
             self.image_heart.clip_draw(0, 0, 30, 28, 50 + i*30, 850)
 
+            # 공격 구체 남은 갯수
+        for i in range(attack.attack_max - attack.attack_cnt):
+            self.image_attack.clip_draw(20, 37, 40, 82, 1550 + i * (-20), 850)
+
 class INJURY:
     def enter(self, event):
         if event == WD:
@@ -208,6 +216,8 @@ class INJURY:
 
         for i in range(self.HP):
             self.image_heart.clip_draw(0, 0, 30, 28, 50 + i*30, 850)
+        for i in range(attack.attack_max - attack.attack_cnt):
+            self.image_attack.clip_draw(20, 37, 40, 82, 1550 + i * (-20), 850)
 
 next_state = {
     MOVE_ATTACK: {WU: MOVE_ATTACK, SU: MOVE_ATTACK, AU: MOVE_ATTACK, DU: MOVE_ATTACK,
@@ -242,6 +252,7 @@ class Player:
         self.image_isaac = load_image('isaac.png')
         self.image_isaac_reverse = load_image('isaac_reverse.png')
         self.image_heart = load_image('heart.png')
+        self.image_attack = load_image('tear.png')
 
         self.mid_x = MAP_WIDTH // 2
         self.mid_y = MAP_HEIGHT // 2

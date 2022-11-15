@@ -1,4 +1,6 @@
 from pico2d import*
+
+import attack
 import isaac
 import random   # 몬스터의 출현
 import playstate
@@ -93,7 +95,7 @@ class Sucker:
                 self.monster_status = False
         if group == 'player:suckers':
             if other.injury_status == False:
-                self.monster_hp -= playstate.player.damege
+                self.monster_hp -= attack.Attack().attack_damage
                 print(self.get_bb())
                 print(other.get_bb())
                 la, ba, ra, ta = self.get_bb()

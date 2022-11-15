@@ -27,14 +27,14 @@ class Attack():
         self.attack_dir = None
 
         # 공격 범위 나중에 설정
-        self.attack_range = 500
+        self.attack_range = 100
 
         self.attack_damage = 100
         self.attack_num = attack_cnt # 처음 생성될때 번호를 가지고 생성
 
         self.Num_tear = None # 2개 연속 사격시 처음 구체 사라지고 두번째 구체를 사라지게 하기 위한 변수
 
-        print('생성: ', self.attack_num)
+        #print('생성: ', self.attack_num)
 
     def update(self):
         global tears, attack_cnt
@@ -51,6 +51,12 @@ class Attack():
 
             self.attack_status = True # 공격 방향으로 직진, 다른 방향 키 입력시 공격구체 방향이동x
             if self.attack_status == True:
+                # 공격 사거리
+                self.attack_range -= 1
+                if self.attack_range < 0:
+                    game_world.remove_object(self)
+                    attack_cnt -= 1
+
                 if self.attack_dir == 0:
                     self.attack_y = (self.attack_y - self.attack_speed)
                     if body_dir == 2 or body_dir == 6:
@@ -131,6 +137,10 @@ class Attack():
                 self.image_attack.clip_draw(self.frame_x, self.frame_y,
                                         self.attack_WID, self.attack_HEI, self.attack_x, self.attack_y)
             draw_rectangle(*self.get_bb())
+
+            # 공격 구체 남은 갯수
+            for i in range(attack_max - attack_cnt):
+                self.image_attack.clip_draw(20, 37, 40, 82, 1550 + i*(-20), 850)
     def get_bb(self):
         return self.attack_x - 21, self.attack_y - 23, self.attack_x + 21, self.attack_y + 23
 
@@ -142,6 +152,7 @@ class Attack():
 attack_on = False
 body_dir = 0
 attack_cnt = 0  # 공격 횟수
+attack_max = 5
 
 # def enter():
 #     global attack_on, tears, body_dir

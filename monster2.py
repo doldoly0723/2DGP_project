@@ -1,5 +1,6 @@
 from pico2d import*
 import isaac
+import attack
 import random   # 몬스터의 출현
 import playstate
 
@@ -220,7 +221,7 @@ class Spitty:
 
         if group == 'player:spittys':
             if other.injury_status == False:
-                self.monster_hp -= playstate.player.damege
+                self.monster_hp -= attack.Attack().attack_damage
                 print(self.get_bb())
                 print(other.get_bb())
                 la, ba, ra, ta = self.get_bb()
