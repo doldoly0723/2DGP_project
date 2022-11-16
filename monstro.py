@@ -5,7 +5,11 @@ import game_world
 import isaac
 import random   # 몬스터의 출현
 import playstate
+import monster_attack
+from monster_attack import Monster_Attack
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
+monster_tears = None
+
 class Monstro:
     image = None
     reverse_image = None
@@ -33,7 +37,11 @@ class Monstro:
         self.pattern_status = False
         self.pattern_1 =[5,6,7,4,5,8]   # 패턴 프레임 순서
         self.pattern_2 = [1,2]          # 패턴 프레임 순서
+        self.pattern_3 = [3]
         self.frame_cnt = 0 # 리스트 안의 프레임 번호
+
+        self.attack_status = False
+        self.tear_num = 0
 
     def respawn_monstro(self):
         if self.monster_status == False:
@@ -75,14 +83,14 @@ class Monstro:
             else:
                 self.monster_x -= playstate.player.dir_x*5
                 self.monster_y -= playstate.player.dir_y*5
-        print(self.monster_t)
+
         if self.pattern_status == False:
-            self.choose_pattern = random.randint(1,10)
-            #self.choose_pattern = 2
+            #self.choose_pattern = random.randint(1,10)
+            self.choose_pattern = 10
             self.pattern_status = True
 
         if self.pattern_status == True:
-            if 1 <= self.choose_pattern <= 7:
+            if 1 <= self.choose_pattern <= 5:
                 self.monster_frame = self.pattern_1[self.frame_cnt]
 
                 # 패턴 프레임 속도
@@ -99,7 +107,7 @@ class Monstro:
                     self.monster_frame = 0
                     self.pattern_status = False
 
-            elif 7 <= self.choose_pattern <= 10:
+            elif 6 <= self.choose_pattern <= 8:
                 self.monster_frame = self.pattern_2[self.frame_cnt]
                 # 패턴 프레임 속도
                 self.frame_count += 1
@@ -111,6 +119,31 @@ class Monstro:
                     self.frame_cnt = 0
                     self.monster_frame = 0
                     self.pattern_status = False
+
+            elif 9 <= self.choose_pattern <= 10:
+                self.monster_frame = self.pattern_3[self.frame_cnt]
+                self.frame_count += 1
+                if self.attack_status == False:
+                    monster_tears = [Monster_Attack() for i in range(8)]
+                    game_world.add_objects(monster_tears, 3)
+                    for tear in monster_tears:
+                        tear.dir = self.tear_num % 8
+                        tear.attack_x = self.monster_x
+                        tear.attack_y = self.monster_y
+                        self.tear_num += 1
+                    game_world.add_collision_pairs(monster_tears, None, 'monster_tears:player')
+
+                    self.attack_status = True
+
+                if self.frame_count == 100:
+                    self.frame_cnt += 1
+                    self.frame_count = 0
+                if self.frame_cnt == 1:
+                    self.frame_cnt = 0
+                    self.monster_frame = 0
+                    #self.tear_num = 0
+                    self.pattern_status = False
+                    self.attack_status = False
 
 
         # self.frame_count += 1

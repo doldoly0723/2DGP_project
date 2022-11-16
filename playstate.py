@@ -9,6 +9,7 @@ from monster import Sucker
 from attack import Attack
 from monster2 import Spitty
 from monstro import Monstro
+from monster_attack import Monster_Attack
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 
 player = None
@@ -16,6 +17,7 @@ suckers = None
 tears = None
 spittys = None
 monstros = None
+monster_tears = None
 
 boss_1 = False
 
@@ -36,11 +38,11 @@ def enter():
 
     game_world.add_object(player, 0)
 
-    suckers = [Sucker() for i in range(3)]
-    game_world.add_objects(suckers, 1)
-
-    spittys = [Spitty() for i in range(3)]
-    game_world.add_objects(spittys, 1)
+    # suckers = [Sucker() for i in range(3)]
+    # game_world.add_objects(suckers, 1)
+    #
+    # spittys = [Spitty() for i in range(3)]
+    # game_world.add_objects(spittys, 1)
 
     # 몬스터와 공격 충돌체크
     game_world.add_collision_pairs(None, suckers, 'tears:suckers')
@@ -49,6 +51,9 @@ def enter():
     #몬스터와 캐릭터 충돌 체크
     game_world.add_collision_pairs(player, suckers, 'player:suckers')
     game_world.add_collision_pairs(player, spittys, 'player:spittys')
+
+    #몬스터 공격과 플레이어 충돌 체크
+    game_world.add_collision_pairs(None, player, 'monster_tears:player')
 
 def exit():
     game_world.clear()
@@ -65,7 +70,7 @@ def update():
             b.handle_collision(a, group)
 
 
-    if isaac.kill_cnt >= 3:     #보스 생성 조건
+    if isaac.kill_cnt >= 0:     #보스 생성 조건
         if boss_1 == False:
             monstros = Monstro()
             game_world.add_object(monstros, 1)

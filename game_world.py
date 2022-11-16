@@ -1,6 +1,8 @@
-# object[0] : 바닥 계층
-# object[1] : 상위 계층
-objects = [[], [], []]
+# object[0] : player
+# object[1] : monster
+# object[2] : tear
+# object[3] : monster_tear
+objects = [[], [], [], []]
 collision_group = dict()
 
 def add_object(o, depth):
@@ -24,8 +26,8 @@ def all_objects():
             yield o # 제러레이터, 모든 객체들을 하나씩 넘겨준다.
 
 
-def second_objects():
-    for o in objects[1][:]:
+def monster_tears_objects():
+    for o in objects[3][:]:
         yield o
 
 def clear():
@@ -37,6 +39,8 @@ def clear():
 collision_group['tears:suckers'] = [[],[]]
 collision_group['tears:spittys'] = [[],[]]
 collision_group['tears:monstros'] = [[],[]]
+
+collision_group['monster_tears:player'] = [[],[]]
 
 collision_group['player:suckers'] = [[],[]]
 collision_group['player:spittys'] = [[],[]]

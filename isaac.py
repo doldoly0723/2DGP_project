@@ -330,5 +330,6 @@ class Player:
             self.HP -= 1
             self.timer = 150 # 무적시간
             self.add_event(Injury)
+            self.injury_status = True
         else:
             pass
