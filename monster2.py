@@ -210,6 +210,7 @@ class Spitty:
         if group == 'tears:spittys':
             self.monster_hp -= playstate.player.damege
             if self.monster_hp <= 0:
+                isaac.kill_cnt += 1
                 self.monster_status = False
 
         if group == 'player:spittys':

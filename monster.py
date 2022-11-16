@@ -62,7 +62,8 @@ class Sucker:
     def update(self):
         Sucker.respawn_sucker(self)
         if self.monster_status == True:
-            self.monster_t += 0.00001
+            #self.monster_t += 0.00001  # 시간 지날수록 속도 증가
+            self.monster_t = 0.005      # 속도 고정
             if playstate.player.map_x == playstate.player.end_of_left or playstate.player.map_x == playstate.player.end_of_right:
                 self.monster_x = ((1 - self.monster_t) * self.monster_x + self.monster_t * playstate.player.mid_x)
             else:
@@ -96,6 +97,7 @@ class Sucker:
         if group == 'tears:suckers':
             self.monster_hp -= playstate.player.damege
             if self.monster_hp <= 0:
+                isaac.kill_cnt += 1
                 self.monster_status = False
         if group == 'player:suckers':
             if other.injury_status == False:

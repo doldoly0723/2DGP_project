@@ -45,15 +45,15 @@ class Monstro:
             self.monster_t = 0
             if self.choose_wall == 1:   #밑에 지역
                 self.monster_x = random.randint(0, MAP_WIDTH)
-                self.monster_y = 0
+                self.monster_y = 0 - 100
             elif self.choose_wall == 2: #위 지역
                 self.monster_x = random.randint(0, MAP_WIDTH)
-                self.monster_y = MAP_HEIGHT
+                self.monster_y = MAP_HEIGHT + 100
             elif self.choose_wall == 3: #왼쪽
-                self.monster_x = 0
+                self.monster_x = 0 - 100
                 self.monster_y = random.randint(0, MAP_HEIGHT)
             elif self.choose_wall == 4: #오른쪽
-                self.monster_x = MAP_WIDTH
+                self.monster_x = MAP_WIDTH + 100
                 self.monster_y = random.randint(0, MAP_HEIGHT)
             self.monster_status = True
 
@@ -61,7 +61,8 @@ class Monstro:
         Monstro.respawn_monstro(self)
         if self.monster_status == True:
             if self.monster_frame == 7:
-                self.monster_t += 0.00005
+                #self.monster_t += 0.00005  # 시간 지날수록 속도 증가
+                self.monster_t = 0.02   # monstro 속도 고정
                 if playstate.player.map_x == playstate.player.end_of_left or playstate.player.map_x == playstate.player.end_of_right:
                     self.monster_x = ((1 - self.monster_t) * self.monster_x + self.monster_t * playstate.player.mid_x)
                 else:
