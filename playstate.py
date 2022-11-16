@@ -8,12 +8,16 @@ from isaac import Player
 from monster import Sucker
 from attack import Attack
 from monster2 import Spitty
+from monstro import Monstro
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 
 player = None
 suckers = None
 tears = None
 spittys = None
+monstros = None
+
+boss_1 = False
 
 def handle_events():
     events = get_events()
@@ -32,11 +36,11 @@ def enter():
 
     game_world.add_object(player, 0)
 
-    suckers = [Sucker() for i in range(3)]
-    game_world.add_objects(suckers, 1)
-
-    spittys = [Spitty() for i in range(3)]
-    game_world.add_objects(spittys, 1)
+    # suckers = [Sucker() for i in range(3)]
+    # game_world.add_objects(suckers, 1)
+    #
+    # spittys = [Spitty() for i in range(3)]
+    # game_world.add_objects(spittys, 1)
 
     # 몬스터와 공격 충돌체크
     game_world.add_collision_pairs(None, suckers, 'tears:suckers')
@@ -50,6 +54,7 @@ def exit():
     game_world.clear()
 
 def update():
+    global monstros, boss_1
     for game_object in game_world.all_objects():
         game_object.update()
     for a, b, group in game_world.all_collision_pairs():
@@ -58,27 +63,20 @@ def update():
             print('COLLISION', group)
             a.handle_collision(b, group)
             b.handle_collision(a, group)
-    # print('start')
-    # for game_object in game_world.all_objects():
-    #     print(game_object)
-    # print('end')
 
-    # player.update()
-    # for tear in tears:
-    #     tear.update()
-    # for sucker in suckers:
-    #     sucker.respawn_sucker()
-    #     sucker.update()
+    if isaac.kill_cnt >= 0:     #보스 생성 조건
+        if boss_1 == False:
+            monstros = Monstro()
+            game_world.add_object(monstros, 1)
+            game_world.add_collision_pairs(None, monstros, 'tears:monstros')
+            game_world.add_collision_pairs(player, monstros, 'player:monstros')
+            boss_1 = True
+
 
 def draw_world():
     for game_object in game_world.all_objects():
         game_object.draw()
-    # global player, suckers, tears
-    # # player.draw()
-    # for tear in tears:
-    #     tear.draw()
-    # for sucker in suckers:
-    #     sucker.draw()
+
     delay(0.01)
 
 def draw():

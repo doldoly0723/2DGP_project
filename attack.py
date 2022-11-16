@@ -87,51 +87,6 @@ class Attack():
                     elif body_dir == 2 or body_dir == 6: #공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
                         self.attack_x -= playstate.player.dir_x*4
 
-        # for i in playstate.suckers:   # 공격 구체와 몬스터 접촉
-        #     if i.sucker_x - 40 <= self.attack_x <= i.sucker_x + 40:
-        #         if i.sucker_y - 40 <= self.attack_y <= i.sucker_y + 40:
-        #
-        #             print(len(playstate.tears))
-        #             print('총 공격 수, 현재 구체 넘버 ', attack_cnt, self.attack_num)
-        #             del playstate.tears[self.attack_num]
-        #
-        #             self.Num_tear = self.attack_num         #2연속 구체 공격시 2번째 삭제 오류
-        #             for j in playstate.tears:
-        #                 if j.attack_num > self.Num_tear:
-        #                     j.attack_num -= 1
-        #
-        #             attack_cnt -= 1
-        #             print('공격 전 체력: ', i.sucker_hp)
-        #             playstate.suckers.sucker_hp -= 100
-        #             print('공격 후 체력: ', i.sucker_hp)
-        #             if i.sucker_hp <= 0:
-        #                 i.sucker_status = False
-        # print('start')
-
-        # for game_object in game_world.second_objects():
-        #     #if game_object == game_world.objects[1][:]:     # 게임오브젝트들 중 플레이어 객체가 아닐 떄
-        #     if game_object.monster_x - 40 <= self.attack_x <= game_object.monster_x + 40:
-        #         if game_object.monster_y - 40 <= self.attack_y <= game_object.monster_y + 40:
-        #             # print(len(playstate.tears))
-        #             # print('총 공격 수, 현재 구체 넘버 ', attack_cnt, self.attack_num)
-        #             #del playstate.tears[self.attack_num]
-        #             game_world.remove_object(self)
-        #
-        #             # self.Num_tear = self.attack_num         #2연속 구체 공격시 2번째 삭제 오류
-        #             # for j in playstate.tears:
-        #             #     if j.attack_num > self.Num_tear:
-        #             #         j.attack_num -= 1
-        #
-        #             attack_cnt -= 1
-        #             print('공격 전 체력: ', game_object.monster_hp)
-        #             game_object.monster_hp -= 100
-        #             print('공격 후 체력: ', game_object.monster_hp)
-        #             if game_object.monster_hp <= 0:
-        #                 game_object.monster_status = False
-
-        # if monster.Sucker().sucker_x-40 <= self.attack_x <= monster.Sucker().sucker_x+40:
-        #     if monster.Sucker().sucker_y-40 <= self.attack_y <= monster.Sucker().sucker_y+40:
-        #         self.attack_status = False
 
     # 캐릭터 이동 및 공격 키 입력
     def draw(self):
@@ -148,7 +103,7 @@ class Attack():
 
     def handle_collision(self, other, group):
         global attack_cnt
-        if group == 'tears:suckers' or group == 'tears:spittys':
+        if group == 'tears:suckers' or group == 'tears:spittys' or 'tears:monstros':
             attack_cnt -= 1
             game_world.remove_object(self)
 attack_on = False
@@ -156,22 +111,3 @@ body_dir = 0
 attack_cnt = 0  # 공격 횟수
 attack_max = 5
 
-# def enter():
-#     global attack_on, tears, body_dir
-#     global attack_cnt
-#     attack_on = False
-#     tears = [Attack()]
-#     body_dir = 0
-#     attack_cnt = 0 #공격 횟수
-#
-# def exit():
-#     global tears
-#     del tears
-# def update():
-#     for tear in tears:
-#         tear.update()
-# def draw():
-#     for tear in tears:
-#         tear.draw()
-#     #update_canvas()
-#

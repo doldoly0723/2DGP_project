@@ -36,7 +36,7 @@ class Sucker:
             Sucker.__init__(self) # 초기화
         if 1 == random.randint(0, 500): #랜덤한 시간으로 몬스터를 생성 난이도 상승시 범위도 같이 높여야 한다
             if self.monster_status == False:
-                self.choose_wall = random.randint(0, 5)
+                self.choose_wall = random.randint(1, 4)
                 #self.sucker_status = 1
                 #초기화 작업
                 self.monster_hp = 200
@@ -116,29 +116,11 @@ class Sucker:
 
                 playstate.player.injury_status = True
                 if self.monster_hp <= 0:
+                    isaac.kill_cnt += 1     # 보스 출현을 위한 킬 카운트
                     self.monster_status = False
 
 
 monster = None
-
-# def enter():
-#     global monster
-#     # 현재 10개체 생성 난이도 상승시 개체수 상승 난이도 상승을 개채를 더할것인지 랜덤 범위를 줄일것인지
-#     monster = [Sucker() for i in range(5)]
-#
-# def exit():
-#     global monster
-#     del monster
-# def update():
-#     global monster
-#     for sucker in monster:
-#         sucker.respawn_sucker()
-#         sucker.update()
-# def draw():
-#     global monster
-#     for sucker in monster:
-#         sucker.draw()
-#
 
 
 

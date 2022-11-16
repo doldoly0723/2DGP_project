@@ -43,7 +43,7 @@ class Spitty:
             Spitty.__init__(self) # 초기화
         if 1 == random.randint(0, 500): #랜덤한 시간으로 몬스터를 생성 난이도 상승시 범위도 같이 높여야 한다
             if self.monster_status == False:
-                self.choose_wall = random.randint(0, 5)
+                self.choose_wall = random.randint(1, 4)
                 #self.sucker_status = 1
                 #초기화 작업
                 self.monster_hp = 300
@@ -143,9 +143,6 @@ class Spitty:
                         self.monster_y = self.monster_y - 2 - playstate.player.dir_y * 5
                         self.monster_x = self.monster_x - playstate.player.dir_x * 5
 
-            # self.monster_x = ((1-self.monster_t)*self.monster_x + self.monster_t*playstate.player.mid_x) - playstate.player.dir_x*5
-            # self.monster_y = ((1-self.monster_t)*self.monster_y + self.monster_t*playstate.player.mid_y) - playstate.player.dir_y*5
-            #if self.sucker_t > 1.0:
 
 
         # 프레임 속도
@@ -204,12 +201,6 @@ class Spitty:
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
             draw_rectangle(*self.get_bb())
-            # if self.monster_x <= playstate.player.mid_x: # sucker 스프라이트 좌우 방향
-            #     self.monster_image.clip_draw(self.monster_frame*80, 0,
-            #                             self.monster_WID, self.monster_HEI, self.monster_x, self.monster_y)
-            # else:
-            #     self.sucker_reverse_image.clip_draw(self.monster_frame * 80, 0,
-            #                                 self.monster_WID, self.monster_HEI, self.monster_x, self.monster_y)
 
 
     def get_bb(self):
@@ -240,28 +231,8 @@ class Spitty:
 
                 playstate.player.injury_status = True
                 if self.monster_hp <= 0:
+                    isaac.kill_cnt += 1     #보스 출현을 위한 kill cnt
                     self.monster_status = False
-
-monster = None
-
-# def enter():
-#     global monster
-#     # 현재 10개체 생성 난이도 상승시 개체수 상승 난이도 상승을 개채를 더할것인지 랜덤 범위를 줄일것인지
-#     monster = [Sucker() for i in range(5)]
-#
-# def exit():
-#     global monster
-#     del monster
-# def update():
-#     global monster
-#     for sucker in monster:
-#         sucker.respawn_sucker()
-#         sucker.update()
-# def draw():
-#     global monster
-#     for sucker in monster:
-#         sucker.draw()
-#
 
 
 
