@@ -13,8 +13,10 @@ MAP_WIDTH, MAP_HEIGHT = 1600, 900
 FULL_MAP_WID, FULL_MAP_HEI = 6401, 3600
 
 class Attack():
+    image = None
     def __init__(self):
-        self.image_attack = load_image('tear.png')
+        if Attack.image == None:
+            Attack.image = load_image('tear.png')
 
         self.frame_x = 347
         self.frame_y = 39
@@ -134,13 +136,13 @@ class Attack():
     # 캐릭터 이동 및 공격 키 입력
     def draw(self):
             if self.attack_status == True:
-                self.image_attack.clip_draw(self.frame_x, self.frame_y,
+                self.image.clip_draw(self.frame_x, self.frame_y,
                                         self.attack_WID, self.attack_HEI, self.attack_x, self.attack_y)
             draw_rectangle(*self.get_bb())
 
             # 공격 구체 남은 갯수
             for i in range(attack_max - attack_cnt):
-                self.image_attack.clip_draw(20, 37, 40, 82, 1550 + i*(-20), 850)
+                self.image.clip_draw(20, 37, 40, 82, 1550 + i*(-20), 850)
     def get_bb(self):
         return self.attack_x - 21, self.attack_y - 23, self.attack_x + 21, self.attack_y + 23
 

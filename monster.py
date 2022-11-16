@@ -6,6 +6,8 @@ import random   # 몬스터의 출현
 import playstate
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 class Sucker:
+    image = None
+    reverse_image = None
     def __init__(self):
         self.monster_WID = 80
         self.monster_HEI = 80
@@ -16,8 +18,10 @@ class Sucker:
         self.monster_y = 0
         self.monster_status = False  # 현재 존재하는가
 
-        self.monster_image = load_image('sucker.png')
-        self.sucker_reverse_image = load_image('sucker_reverse.png')
+        if Sucker.image == None:
+            Sucker.image = load_image('sucker.png')
+        if Sucker.reverse_image == None:
+            Sucker.reverse_image = load_image('sucker_reverse.png')
         self.monster_frame = 0
         self.frame_count = 0
 
@@ -78,10 +82,10 @@ class Sucker:
     def draw(self):
         if self.monster_status == True:
             if self.monster_x <= self.reverse_x: # sucker 스프라이트 좌우 방향
-                self.monster_image.clip_draw(self.monster_frame*80, 0,
+                self.image.clip_draw(self.monster_frame*80, 0,
                                         self.monster_WID, self.monster_HEI, self.monster_x, self.monster_y)
             else:
-                self.sucker_reverse_image.clip_draw(self.monster_frame * 80, 0,
+                self.reverse_image.clip_draw(self.monster_frame * 80, 0,
                                             self.monster_WID, self.monster_HEI, self.monster_x, self.monster_y)
             draw_rectangle(*self.get_bb())
 

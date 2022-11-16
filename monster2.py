@@ -6,6 +6,7 @@ import playstate
 
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 class Spitty:
+    image = None
     def __init__(self):
         self.monster_WID = 64
         self.monster_HEI = 64
@@ -15,8 +16,9 @@ class Spitty:
         self.monster_x = 0
         self.monster_y = 0
         self.monster_status = False  # 현재 존재하는가
+        if Spitty.image == None:
+            Spitty.image = load_image('spitty.png')
 
-        self.monster_image = load_image('spitty.png')
         self.monster_frame = 0
         self.frame_count = 0
 
@@ -159,45 +161,45 @@ class Spitty:
 
             if self.compare_x >= 0 and self.compare_y >= 0:  # 1사분면
                 if self.compare_x >= self.compare_y:
-                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID, self.monster_HEI,
+                    self.image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID, self.monster_HEI,
                                                            3.141592, 'v', self.monster_x, self.monster_y, self.monster_size, self.monster_size)
                 else:
-                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 1, self.monster_WID,
+                    self.image.clip_composite_draw(self.monster_frame * 64, 64 * 1, self.monster_WID,
                                                            self.monster_HEI,
                                                            0, '', self.monster_x, self.monster_y, self.monster_size, self.monster_size)
 
             elif self.compare_x >= 0 and self.compare_y <= 0:  # 4사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
-                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID,
+                    self.image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID,
                                                            self.monster_HEI,
                                                            3.141592, 'v', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
                 else:
-                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 2, self.monster_WID,
+                    self.image.clip_composite_draw(self.monster_frame * 64, 64 * 2, self.monster_WID,
                                                            self.monster_HEI,
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
 
             elif self.compare_x <= 0 and self.compare_y <= 0:  # 3사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
-                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID,
+                    self.image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID,
                                                            self.monster_HEI,
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
                 else:
-                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 2, self.monster_WID,
+                    self.image.clip_composite_draw(self.monster_frame * 64, 64 * 2, self.monster_WID,
                                                            self.monster_HEI,
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
 
             elif self.compare_x <= 0 and self.compare_y >= 0:  # 2사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
-                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID,
+                    self.image.clip_composite_draw(self.monster_frame * 64, 64 * 3, self.monster_WID,
                                                            self.monster_HEI,
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
                 else:
-                    self.monster_image.clip_composite_draw(self.monster_frame * 64, 64 * 1, self.monster_WID,
+                    self.image.clip_composite_draw(self.monster_frame * 64, 64 * 1, self.monster_WID,
                                                            self.monster_HEI,
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
