@@ -85,8 +85,8 @@ class Monstro:
                 self.monster_y -= playstate.player.dir_y*5
 
         if self.pattern_status == False:
-            #self.choose_pattern = random.randint(1,10)
-            self.choose_pattern = 10
+            self.choose_pattern = random.randint(1,10)
+            #self.choose_pattern = 10
             self.pattern_status = True
 
         if self.pattern_status == True:

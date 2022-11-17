@@ -61,28 +61,35 @@ key_event_table = {
 #         # 머리
 #         self.image_isaac.clip_draw((self.frame_head + self.head_frame) * self.head_WID + self.head_x, self.head_y,
 #                                    self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
+body_RL = False
+body_UD = False
 class MOVE_ATTACK:
     def enter(self, event):
+        global body_UD, body_RL
         if event == WD:
             self.dir_y += 1
             self.frame_body_Y = 1   # UP, DOWN
             self.frame_nody_reverse = 1
-            attack.body_dir = 4 #up
+            #attack.body_dir = 4 #up
+            body_UD = True
         elif event == SD:
             self.dir_y -= 1
             self.frame_body_Y = 1
             self.frame_body_reverse = 0
-            attack.body_dir = 0  # down
+            #attack.body_dir = 0  # down
+            body_UD = True
         elif event == AD:
             self.dir_x -= 1
             self.frame_body_Y = 0  # LR
             self.frame_body_reverse = 1
-            attack.body_dir = 2  # left
+            #attack.body_dir = 2  # left
+            body_RL = True
         elif event == DD:
             self.dir_x += 1
             self.frame_body_Y = 0
             self.frame_body_reverse = 0
-            attack.body_dir = 6  # right
+            #attack.body_dir = 6  # right
+            body_RL = True
         if event == UP_D:
             self.frame_head = 4
             if attack.attack_cnt < attack.attack_max:
@@ -132,12 +139,16 @@ class MOVE_ATTACK:
             #playstate.tears += [attack.Attack()]
         if event == WU:
             self.dir_y -= 1
+            body_UD = False
         elif event == SU:
             self.dir_y += 1
+            body_UD = False
         elif event == AU:
             self.dir_x += 1
+            body_RL = False
         elif event == DU:
             self.dir_x -= 1
+            body_RL = False
 
     def exit(self):
         pass
@@ -188,12 +199,16 @@ class INJURY:
     def enter(self, event):
         if event == WD:
             self.dir_y += 1
+            attack.body_dir = 4
         elif event == SD:
             self.dir_y -= 1
+            attack.body_dir = 0
         elif event == AD:
             self.dir_x -= 1
+            attack.body_dir = 2
         elif event == DD:
             self.dir_x += 1
+            attack.body_dir = 6
         if event == WU:
             self.dir_y -= 1
         elif event == SU:

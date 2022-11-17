@@ -39,6 +39,7 @@ class Attack():
         #print('생성: ', self.attack_num)
 
     def update(self):
+        print(body_dir)
         global tears, attack_cnt
         if attack_on == True: # 화살표 누르면 활성화
             if self.attack_status == False:
@@ -59,32 +60,32 @@ class Attack():
                     game_world.remove_object(self)
                     attack_cnt -= 1
 
-                if self.attack_dir == 0:
+                if self.attack_dir == 0:    #down
                     self.attack_y = (self.attack_y - self.attack_speed)
-                    if body_dir == 2 or body_dir == 6:
+                    if isaac.body_RL == True:
                         self.attack_x -= playstate.player.dir_x*5
-                    elif body_dir == 0 or body_dir == 4:
+                    if isaac.body_UD == True:
                         self.attack_y -= playstate.player.dir_y * 4
 
-                elif self.attack_dir == 4:
+                elif self.attack_dir == 4:  #up
                     self.attack_y = (self.attack_y + self.attack_speed)
-                    if body_dir == 2 or body_dir == 6:
+                    if isaac.body_RL == True:
                         self.attack_x -= playstate.player.dir_x * 5
-                    elif body_dir == 0 or body_dir == 4:
+                    if isaac.body_UD == True:
                         self.attack_y -= playstate.player.dir_y * 4
 
-                elif self.attack_dir == 6:
+                elif self.attack_dir == 6:  #left
                     self.attack_x = (self.attack_x - self.attack_speed)
-                    if body_dir == 4 or body_dir == 0:  #공격 후 이동시 구체는 일정하게 이동
+                    if isaac.body_UD == True:  #공격 후 이동시 구체는 일정하게 이동
                         self.attack_y -= playstate.player.dir_y*5
-                    elif body_dir == 2 or body_dir == 6:  # 공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
+                    if isaac.body_RL == True:  # 공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
                         self.attack_x -= playstate.player.dir_x * 4
 
-                elif self.attack_dir == 2:
+                elif self.attack_dir == 2:  #right
                     self.attack_x = (self.attack_x + self.attack_speed)
-                    if body_dir == 4 or body_dir == 0:  #공격 후 이동시 구체는 일정하게 이동
+                    if isaac.body_UD == True:  #공격 후 이동시 구체는 일정하게 이동
                         self.attack_y -= playstate.player.dir_y*5
-                    elif body_dir == 2 or body_dir == 6: #공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
+                    if isaac.body_RL == True: #공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
                         self.attack_x -= playstate.player.dir_x*4
 
 
