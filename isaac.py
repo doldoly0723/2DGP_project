@@ -222,8 +222,8 @@ class INJURY:
     def do(self, event):
 
 
-        self.map_x += self.dir_x * 5
-        self.map_y += self.dir_y * 5
+        self.map_x += self.dir_x * 7
+        self.map_y += self.dir_y * 7
         self.map_x = clamp(self.end_of_left, self.map_x, self.end_of_right)
         self.map_y = clamp(self.end_of_bottom, self.map_y, self.end_of_top)
 
@@ -260,6 +260,7 @@ MAP_WIDTH, MAP_HEIGHT = 1600, 900
 # 전체 맵 크기
 FULL_MAP_WID, FULL_MAP_HEI = 6401, 3600
 kill_cnt = 0
+boss_kill_cnt = 0
 
 class Player:
 

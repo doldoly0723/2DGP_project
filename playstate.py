@@ -3,6 +3,7 @@ import game_framework
 import isaac
 import game_world
 import monster
+import item_state
 
 from isaac import Player
 from monster import Sucker
@@ -19,7 +20,8 @@ spittys = None
 monstros = None
 monster_tears = None
 
-boss_1 = False
+boss_1 = False  #stage 1
+item_1 = False  #stage 1
 
 def handle_events():
     events = get_events()
@@ -59,7 +61,7 @@ def exit():
     game_world.clear()
 
 def update():
-    global monstros, boss_1
+    global monstros, boss_1, item_1
     for game_object in game_world.all_objects():
         game_object.update()
     for a, b, group in game_world.all_collision_pairs():
@@ -70,14 +72,17 @@ def update():
             b.handle_collision(a, group)
 
 
-    if isaac.kill_cnt >= 3:     #보스 생성 조건
+    if isaac.kill_cnt >= 0:     #보스 생성 조건
         if boss_1 == False:
             monstros = Monstro()
             game_world.add_object(monstros, 1)
             game_world.add_collision_pairs(None, monstros, 'tears:monstros')
             game_world.add_collision_pairs(player, monstros, 'player:monstros')
             boss_1 = True
-
+    if isaac.boss_kill_cnt == 1:
+        if item_1 == False:
+            game_framework.push_state(item_state)
+            item_1 = True
 
 def draw_world():
     for game_object in game_world.all_objects():

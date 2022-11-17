@@ -226,5 +226,32 @@ monster_t 속도 조절
 수정 완료
 
 캐릭터 이동에 대한 몬스터 공격 구체 좌표 수정 필요
+수정 완료
+
+11/17 아이템 추가
+
+공격력 증가		damege_up	260 500 
+사거리 증가		Range_up		0 650
+최대사격 횟수 증가		max_attack_up	130*3 650
+체력 증가			heart_up		0 500
+공격 크기 증가		attack size up	130*3 500
+
+3층 800- 150 = 750
+2층 800-300 = 500
+HIE = 150
+WIE = 130
+
+생성시 초기값 주는 코드
+                    for tear in monster_tears:
+                        tear.dir = self.tear_num % 8
+                        tear.attack_x = self.monster_x
+                        tear.attack_y = self.monster_y
+                        self.tear_num += 1
+                    game_world.add_collision_pairs(monster_tears, None, 'monster_tears:player')
+나중에 난이도 증가할때 이렇게 코드 써서 보스나 몬스터 기본 체력 증가시켜서 추가
+
+40 : 21 = 60 : x
+21*attack_size = 40x
+x = 21
 
 프레임 속도 조절(time)

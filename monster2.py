@@ -208,14 +208,14 @@ class Spitty:
 
     def handle_collision(self, other, group):
         if group == 'tears:spittys':
-            self.monster_hp -= playstate.player.damege
+            self.monster_hp -= attack.attack_damge
             if self.monster_hp <= 0:
                 isaac.kill_cnt += 1
                 self.monster_status = False
 
         if group == 'player:spittys':
             if other.injury_status == False:
-                self.monster_hp -= attack.Attack().attack_damage
+                self.monster_hp -= playstate.player.damege
                 print(self.get_bb())
                 print(other.get_bb())
                 la, ba, ra, ta = self.get_bb()

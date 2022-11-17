@@ -30,7 +30,7 @@ class Monster_Attack():
         self.attack_dir = None
 
         # 공격 범위 나중에 설정
-        self.attack_range = 300
+        self.attack_range = 0
 
         self.attack_damage = 100
 
@@ -41,9 +41,9 @@ class Monster_Attack():
         #print('생성: ', self.attack_num)
 
     def update(self):
-
-        self.attack_range -= 1
-        if self.attack_range < 0:
+        global monster_attack_range
+        self.attack_range += 1
+        if (monster_attack_range - self.attack_range) < 0:
             game_world.remove_object(self)
 
         if self.dir == 0:   #down
@@ -126,4 +126,6 @@ class Monster_Attack():
 
 attack_on = False
 body_dir = 0
+monster_attack_range = 200
+monster_attack_damage = 100
 

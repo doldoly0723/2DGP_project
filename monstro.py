@@ -49,7 +49,7 @@ class Monstro:
             self.choose_wall = random.randint(1, 4)
             #self.sucker_status = 1
             #초기화 작업
-            self.monster_hp = 3000
+            self.monster_hp = 100
             self.monster_t = 0
             if self.choose_wall == 1:   #밑에 지역
                 self.monster_x = random.randint(0, MAP_WIDTH)
@@ -181,13 +181,14 @@ class Monstro:
 
     def handle_collision(self, other, group):
         if group == 'tears:monstros':
-            self.monster_hp -= playstate.player.damege
+            self.monster_hp -= attack.attack_damge
             if self.monster_hp <= 0:
+                isaac.boss_kill_cnt += 1
                 game_world.remove_object(self)
                 #self.monster_status = False
         if group == 'player:monstros':
             if other.injury_status == False:
-                self.monster_hp -= attack.Attack().attack_damage
+                self.monster_hp -= playstate.player.damege
                 print(self.get_bb())
                 print(other.get_bb())
                 la, ba, ra, ta = self.get_bb()
@@ -205,6 +206,7 @@ class Monstro:
                 playstate.player.injury_status = True
                 if self.monster_hp <= 0:
                     print('remove')
+                    isaac.boss_kill_cnt += 1
                     game_world.remove_object(self)
                     #self.monster_status = False
 
