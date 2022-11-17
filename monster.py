@@ -88,20 +88,21 @@ class Sucker:
             else:
                 self.reverse_image.clip_draw(self.monster_frame * 80, 0,
                                             self.monster_WID, self.monster_HEI, self.monster_x, self.monster_y)
-            draw_rectangle(*self.get_bb())
+            # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         return self.monster_x - 30, self.monster_y - 40, self.monster_x + 30, self.monster_y + 30
 
     def handle_collision(self, other, group):
         if group == 'tears:suckers':
-            self.monster_hp -= attack.attack_damge
+            self.monster_hp -= attack.attack_damage
             if self.monster_hp <= 0:
                 isaac.kill_cnt += 1
                 self.monster_status = False
         if group == 'player:suckers':
             if other.injury_status == False:
-                self.monster_hp -= playstate.player.damege
+                self.monster_hp -= playstate.player.damage
+                print('asdfsdafdsafdasf')
                 print(self.get_bb())
                 print(other.get_bb())
                 la, ba, ra, ta = self.get_bb()
@@ -116,7 +117,6 @@ class Sucker:
                 elif ba < tb:
                     self.monster_y += 100
 
-                playstate.player.injury_status = True
                 if self.monster_hp <= 0:
                     isaac.kill_cnt += 1     # 보스 출현을 위한 킬 카운트
                     self.monster_status = False

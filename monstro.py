@@ -49,7 +49,7 @@ class Monstro:
             self.choose_wall = random.randint(1, 4)
             #self.sucker_status = 1
             #초기화 작업
-            self.monster_hp = 100
+            self.monster_hp = 3000
             self.monster_t = 0
             if self.choose_wall == 1:   #밑에 지역
                 self.monster_x = random.randint(0, MAP_WIDTH)
@@ -173,7 +173,7 @@ class Monstro:
                     self.image.clip_composite_draw((self.monster_frame-5) * 80, 143, self.monster_WID, self.monster_HEI,
                                                    3.141592, 'v', self.monster_x, self.monster_y, self.monster_size,
                                                    self.monster_size)
-            draw_rectangle(*self.get_bb())
+            # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         return self.monster_x - 40*(self.monster_size//100), self.monster_y - 45*(self.monster_size//100), \
@@ -181,14 +181,14 @@ class Monstro:
 
     def handle_collision(self, other, group):
         if group == 'tears:monstros':
-            self.monster_hp -= attack.attack_damge
+            self.monster_hp -= attack.attack_damage
             if self.monster_hp <= 0:
                 isaac.boss_kill_cnt += 1
                 game_world.remove_object(self)
                 #self.monster_status = False
         if group == 'player:monstros':
             if other.injury_status == False:
-                self.monster_hp -= playstate.player.damege
+                self.monster_hp -= playstate.player.damage
                 print(self.get_bb())
                 print(other.get_bb())
                 la, ba, ra, ta = self.get_bb()
@@ -203,7 +203,6 @@ class Monstro:
                 elif ba < tb:
                     self.monster_y += 100
 
-                playstate.player.injury_status = True
                 if self.monster_hp <= 0:
                     print('remove')
                     isaac.boss_kill_cnt += 1

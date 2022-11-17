@@ -4,6 +4,7 @@ import isaac
 import game_world
 import monster
 import item_state
+import end_state
 
 from isaac import Player
 from monster import Sucker
@@ -68,11 +69,14 @@ def update():
         if collide(a, b):
 
             print('COLLISION', group)
-            a.handle_collision(b, group)
             b.handle_collision(a, group)
+            a.handle_collision(b, group)
 
 
-    if isaac.kill_cnt >= 0:     #보스 생성 조건
+    if player.HP == 0:
+        game_framework.change_state(end_state)
+
+    if isaac.kill_cnt >= 3:     #보스 생성 조건
         if boss_1 == False:
             monstros = Monstro()
             game_world.add_object(monstros, 1)

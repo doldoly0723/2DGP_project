@@ -113,7 +113,7 @@ class Monster_Attack():
     def draw(self):
             self.image.clip_draw(self.frame_x, self.frame_y,
                                         self.attack_WID, self.attack_HEI, self.attack_x, self.attack_y)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
 
     def get_bb(self):

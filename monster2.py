@@ -200,7 +200,7 @@ class Spitty:
                                                            self.monster_HEI,
                                                            0, '', self.monster_x, self.monster_y, self.monster_size,
                                                            self.monster_size)
-            draw_rectangle(*self.get_bb())
+            # draw_rectangle(*self.get_bb())
 
 
     def get_bb(self):
@@ -208,14 +208,14 @@ class Spitty:
 
     def handle_collision(self, other, group):
         if group == 'tears:spittys':
-            self.monster_hp -= attack.attack_damge
+            self.monster_hp -= attack.attack_damage
             if self.monster_hp <= 0:
                 isaac.kill_cnt += 1
                 self.monster_status = False
 
         if group == 'player:spittys':
             if other.injury_status == False:
-                self.monster_hp -= playstate.player.damege
+                self.monster_hp -= playstate.player.damage
                 print(self.get_bb())
                 print(other.get_bb())
                 la, ba, ra, ta = self.get_bb()
@@ -230,7 +230,6 @@ class Spitty:
                 elif ba < tb:
                     self.monster_y += 100
 
-                playstate.player.injury_status = True
                 if self.monster_hp <= 0:
                     isaac.kill_cnt += 1     #보스 출현을 위한 kill cnt
                     self.monster_status = False

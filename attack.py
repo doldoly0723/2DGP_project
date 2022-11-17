@@ -92,7 +92,7 @@ class Attack():
             if self.attack_status == True:
                 self.image.clip_draw(self.frame_x, self.frame_y,
                                         self.attack_WID, self.attack_HEI, self.attack_x, self.attack_y, attack_size, attack_size)
-            draw_rectangle(*self.get_bb())
+            # draw_rectangle(*self.get_bb())
 
             # 공격 구체 남은 갯수
             for i in range(attack_max - attack_cnt):
@@ -111,7 +111,7 @@ body_dir = 0
 attack_cnt = 0  # 공격 횟수
 attack_max = 5
 
-attack_damge = 100
+attack_damage = 100
 attack_range = 100
 attack_size = 40
 

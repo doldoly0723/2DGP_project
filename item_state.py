@@ -10,6 +10,7 @@ import attack
 # fill here
 # running = True
 image = None
+press_image = None
 item_choose = False
 item_num1 = None
 item_num2 = None
@@ -20,8 +21,9 @@ item = { 1: 'damege_up', 2: 'range_up', 3: 'max_attack_up', 4: 'heart_up', 5: 'a
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 
 def enter():
-    global image
+    global image, press_image
     image = load_image('item1.png')
+    press_image = load_image('press_num.png')
     # fill here
     pass
 
@@ -84,6 +86,10 @@ def draw():
         image.clip_draw(item_WEI * 0, 500, item_WEI, item_HIE, MAP_WIDTH // 3 * 2, MAP_HEIGHT // 2)
     elif item_num3 == 5:
         image.clip_draw(item_WEI * 3, 500, item_WEI + 40, item_HIE, MAP_WIDTH // 3 * 2, MAP_HEIGHT // 2)
+
+    press_image.clip_draw(0, 0, 225, 55, MAP_WIDTH//3, MAP_HEIGHT//3)
+    press_image.clip_draw(225, 0, 235, 55, MAP_WIDTH // 2, MAP_HEIGHT // 3)
+    press_image.clip_draw(465, 0, 232, 55, MAP_WIDTH // 3 * 2, MAP_HEIGHT // 3)
     update_canvas()
     pass
 
@@ -97,7 +103,7 @@ def handle_events():
             match event.key:
                 case pico2d.SDLK_1: # item_num1
                     if item_num1 == 1:
-                        attack.attack_damge += 100
+                        attack.attack_damage += 100
                     elif item_num1 == 2:
                         attack.attack_range += 50
                     elif item_num1 == 3:
@@ -110,7 +116,7 @@ def handle_events():
                     game_framework.pop_state()
                 case pico2d.SDLK_2: #item_num2
                     if item_num2 == 1:
-                        attack.attack_damge += 100
+                        attack.attack_damage += 100
                     elif item_num2 == 2:
                         attack.attack_range += 50
                     elif item_num2 == 3:
@@ -123,7 +129,7 @@ def handle_events():
                     game_framework.pop_state()
                 case pico2d.SDLK_3: #item_num3
                     if item_num3 == 1:
-                        attack.attack_damge += 100
+                        attack.attack_damage += 100
                     elif item_num3 == 2:
                         attack.attack_range += 50
                     elif item_num3 == 3:

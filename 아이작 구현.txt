@@ -250,8 +250,41 @@ WIE = 130
                     game_world.add_collision_pairs(monster_tears, None, 'monster_tears:player')
 나중에 난이도 증가할때 이렇게 코드 써서 보스나 몬스터 기본 체력 증가시켜서 추가
 
-40 : 21 = 60 : x
-21*attack_size = 40x
-x = 21
+보스 처치시 아이템 랜덤 선택 완료
+
+isaac
+kill_cnt =0
+boss_kill_cnt = 0
+body_RL = False
+body_UD = False
+
+attack
+attack_on = False
+body_dir = 0
+attack_cnt = 0  # 공격 횟수
+attack_max = 5
+attack_damage = 100
+attack_range = 100
+attack_size = 40
+
+monster_attack
+attack_on = False
+body_dir = 0
+monster_attack_range = 200
+monster_attack_damage = 100
+
+playstate
+player = None
+suckers = None
+tears = None
+spittys = None
+monstros = None
+monster_tears = None
+boss_1 = False  #stage 1
+item_1 = False  
+
+monstro
+monster_tears = None
+
 
 프레임 속도 조절(time)

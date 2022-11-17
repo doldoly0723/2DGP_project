@@ -317,7 +317,7 @@ class Player:
         self.cur_state = MOVE_ATTACK
         self.cur_state.enter(self, None)
 
-        self.damege = 100
+        self.damage = 100
         self.HP = 5 # 체력 5칸
         self.timer = 100 # 부상 무적 상태
 
@@ -337,7 +337,7 @@ class Player:
 
     def draw(self):
         self.cur_state.draw(self)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
     def get_bb(self):
         return self.mid_x - 50, self.mid_y - 70, self.mid_x + 40, self.mid_y + 40
 
