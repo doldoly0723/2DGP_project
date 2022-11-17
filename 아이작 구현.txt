@@ -286,5 +286,9 @@ item_1 = False
 monstro
 monster_tears = None
 
+end_state 추가
+재시작은 아직 안돌아간다
+재시작하면 변수 값들이 이상해져서 갑자기 보스 나오거나 우측 공격 사거리가 엄청 줄어드는 현상 발생
+
 
 프레임 속도 조절(time)
