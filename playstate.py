@@ -2,15 +2,15 @@ from pico2d import*
 import game_framework
 import isaac
 import game_world
-import monster
+import monster_sucker
 import item_state
 import end_state
 
 from isaac import Player
-from monster import Sucker
+from monster_sucker import Sucker
 from attack import Attack
-from monster2 import Spitty
-from monstro import Monstro
+from monster_spitty import Spitty
+from boss_monstro import Monstro
 from monster_attack import Monster_Attack
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 
@@ -76,7 +76,7 @@ def update():
     if player.HP == 0:
         game_framework.change_state(end_state)
 
-    if isaac.kill_cnt >= 3:     #보스 생성 조건
+    if isaac.kill_cnt >= 0:     #보스 생성 조건
         if boss_1 == False:
             monstros = Monstro()
             game_world.add_object(monstros, 1)

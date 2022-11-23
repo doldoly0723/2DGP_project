@@ -1,7 +1,7 @@
 from pico2d import*
 import attack
 import game_world
-import monster
+import monster_sucker
 import playstate
 
 WD, SD, AD, DD, UP_D, DOWN_D, RIGHT_D, LEFT_D, WU, SU, AU, DU, UP_U, DOWN_U, RIGHT_U, LEFT_U, TIMER, Injury = range(18) # 키
