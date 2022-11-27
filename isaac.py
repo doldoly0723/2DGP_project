@@ -1,8 +1,31 @@
 from pico2d import*
 import attack
+import game_framework
 import game_world
 import monster_sucker
 import playstate
+
+# 속도
+PIXEL_PER_METER = (10.0 / 0.1)  #10 pixel 10cm
+RUN_SPEED_KMPH = 20.0   #Km / Hour
+
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+INJURY_SPEED_KMPH = 30.0
+INJURY_SPEED_MPM = (INJURY_SPEED_KMPH * 1000.0 / 60.0)
+INJURY_SPEED_MPS = (INJURY_SPEED_MPM / 60.0)
+INJURY_SPEED_PPS = (INJURY_SPEED_MPS * PIXEL_PER_METER)
+
+# frame
+HEAD_TIME_PER_ACTION = 2.0
+HEAD_ACTION_PER_TIME = 1.0 / HEAD_TIME_PER_ACTION
+HEAD_FRAMES_PER_ACTION = 2
+
+BODY_TIME_PER_ACTION = 1.0
+BODY_ACTION_PER_TIME = 1.0 / BODY_TIME_PER_ACTION
+BODY_FRAMES_PER_ACTION = 10
 
 WD, SD, AD, DD, UP_D, DOWN_D, RIGHT_D, LEFT_D, WU, SU, AU, DU, UP_U, DOWN_U, RIGHT_U, LEFT_U, TIMER, Injury = range(18) # 키
 key_event_table = {
@@ -24,43 +47,6 @@ key_event_table = {
     (SDL_KEYUP, SDLK_LEFT): LEFT_U,
 }
 
-# class IDLE:
-#     def enter(self, event):
-#         self.dir_x = 0
-#         self.dir_y = 0
-#     def exit(self):
-#         pass
-#     def do(self):
-#         self.head_cnt += 1
-#         if self.head_cnt > 50:
-#             self.head_frame = (self.head_frame + 1) % 2
-#             self.head_cnt = 0
-#
-#         # update_head_frame(self): # 0, 1 눈을 깜빡이게 하면서 이동속도를 늧추지 않게 하기 위해서는? 우선은 랜덤 처리
-#         if self.frame_body_Y == 0:  # LR
-#             self.body_y = self.body_LR_y
-#         elif self.frame_body_Y == 1:  # UD
-#             self.body_y = self.body_UD_y
-#
-#         # update_body_frame(self):
-#         self.body_cnt += 1
-#         if self.body_cnt > 20:
-#             self.body_frame = (self.body_frame + 1) % 10
-#             self.body_cnt = 0
-#
-#     def draw(self):
-#         self.image_map.clip_draw(self.map_x, self.map_y, MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
-#         # 몸
-#         if (self.frame_body_reverse == 0):
-#             self.image_isaac.clip_draw(self.body_frame * self.body_WID + self.body_x, self.body_y, self.body_WID,
-#                                        self.body_HEI, self.mid_x, self.mid_y - self.body_head_space)
-#         elif (self.frame_body_reverse == 1):
-#             self.image_isaac_reverse.clip_draw(self.body_frame * self.body_WID + self.body_reverse_x, self.body_y,
-#                                                self.body_WID, self.body_HEI, self.mid_x,
-#                                                self.mid_y - self.body_head_space)
-#         # 머리
-#         self.image_isaac.clip_draw((self.frame_head + self.head_frame) * self.head_WID + self.head_x, self.head_y,
-#                                    self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
 body_RL = False
 body_UD = False
 class MOVE_ATTACK:
@@ -153,15 +139,16 @@ class MOVE_ATTACK:
     def exit(self):
         pass
     def do(self, event):
-        self.map_x += self.dir_x * 5
-        self.map_y += self.dir_y * 5
+        self.map_x += self.dir_x * RUN_SPEED_PPS * game_framework.frame_time
+        self.map_y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
         self.map_x = clamp(self.end_of_left, self.map_x, self.end_of_right)
         self.map_y = clamp(self.end_of_bottom, self.map_y, self.end_of_top)
 
-        self.head_cnt += 1
-        if self.head_cnt > 50:
-            self.head_frame = (self.head_frame + 1) % 2
-            self.head_cnt = 0
+        # self.head_cnt += 1
+        # if self.head_cnt > 50:
+        #     self.head_frame = (self.head_frame + 1) % 2
+        #     self.head_cnt = 0
+        self.head_frame = (self.head_frame + HEAD_FRAMES_PER_ACTION * HEAD_ACTION_PER_TIME * game_framework.frame_time) % 2
 
         # update_head_frame(self): # 0, 1 눈을 깜빡이게 하면서 이동속도를 늧추지 않게 하기 위해서는? 우선은 랜덤 처리
         if self.frame_body_Y == 0:   #LR
@@ -170,23 +157,24 @@ class MOVE_ATTACK:
             self.body_y = self.body_UD_y
 
         #update_body_frame(self):
-        self.body_cnt += 1
-        if self.body_cnt > 20:
-            self.body_frame = (self.body_frame+1)%10
-            self.body_cnt = 0
+        # self.body_cnt += 1
+        # if self.body_cnt > 20:
+        #     self.body_frame = (self.body_frame+1)%10
+        #     self.body_cnt = 0
+        self.body_frame = (self.body_frame + BODY_FRAMES_PER_ACTION * BODY_ACTION_PER_TIME * game_framework.frame_time) % 10
 
     def draw(self):
-        self.image_map.clip_draw(self.map_x, self.map_y, MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+        self.image_map.clip_draw(int(self.map_x), int(self.map_y), MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
         # 몸
         if (self.frame_body_reverse == 0):
-            self.image_isaac.clip_draw(self.body_frame * self.body_WID + self.body_x, self.body_y, self.body_WID,
+            self.image_isaac.clip_draw(int(self.body_frame) * self.body_WID + self.body_x, self.body_y, self.body_WID,
                                        self.body_HEI, self.mid_x, self.mid_y - self.body_head_space)
         elif (self.frame_body_reverse == 1):
-            self.image_isaac_reverse.clip_draw(self.body_frame * self.body_WID + self.body_reverse_x, self.body_y,
+            self.image_isaac_reverse.clip_draw((9 - int(self.body_frame)) * self.body_WID + self.body_reverse_x, self.body_y,
                                                self.body_WID, self.body_HEI, self.mid_x,
                                                self.mid_y - self.body_head_space)
         # 머리
-        self.image_isaac.clip_draw((self.frame_head + self.head_frame) * self.head_WID + self.head_x, self.head_y,
+        self.image_isaac.clip_draw((self.frame_head + int(self.head_frame)) * self.head_WID + self.head_x, self.head_y,
                                    self.head_WID, self.head_HEI, self.mid_x, self.mid_y)
         for i in range(self.HP):
             self.image_heart.clip_draw(0, 0, 30, 28, 50 + i*30, 850)
@@ -222,8 +210,8 @@ class INJURY:
     def do(self, event):
 
 
-        self.map_x += self.dir_x * 7
-        self.map_y += self.dir_y * 7
+        self.map_x += self.dir_x * INJURY_SPEED_PPS * game_framework.frame_time
+        self.map_y += self.dir_y * INJURY_SPEED_PPS * game_framework.frame_time
         self.map_x = clamp(self.end_of_left, self.map_x, self.end_of_right)
         self.map_y = clamp(self.end_of_bottom, self.map_y, self.end_of_top)
 
@@ -233,7 +221,7 @@ class INJURY:
             self.add_event(TIMER)
 
     def draw(self):
-        self.image_map.clip_draw(self.map_x, self.map_y, MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+        self.image_map.clip_draw(int(self.map_x), int(self.map_y), MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
         self.image_isaac.clip_draw(30, 45, 90, 105, self.mid_x, self.mid_y)
 
         for i in range(self.HP):

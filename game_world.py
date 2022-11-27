@@ -47,7 +47,7 @@ collision_group['player:spittys'] = [[],[]]
 collision_group['player:monstros'] = [[],[]]
 
 def add_collision_pairs(a, b, group):
-    print('add new group')
+    #print('add new group')
     #collision_group[group] = [[], []]  # 호출될때마다 초기화 된다
     if a:
         if type(a) == list:
