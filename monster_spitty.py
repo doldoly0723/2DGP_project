@@ -1,15 +1,21 @@
 from pico2d import*
+
+import game_framework
 import isaac
 import attack
 import random   # 몬스터의 출현
 import playstate
 
 PIXEL_PER_METER = (10.0 / 0.1)  #10 pixel 10cm
-RUN_SPEED_KMPH = 15.0   #Km / Hour
+RUN_SPEED_KMPH = 5.0   #Km / Hour
 
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+TIME_PER_ACTION = 10.0
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 4
 
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 class Spitty:
@@ -69,8 +75,6 @@ class Spitty:
                 elif self.choose_wall == 4: #오른쪽
                     self.x = MAP_WIDTH
                     self.y = random.randint(0, MAP_HEIGHT)
-                self.x = 200
-                self.y = 550
                 self.monster_status = True
         # self.sucker_x = 0
         # self.sucker_y = 0
@@ -97,18 +101,18 @@ class Spitty:
             if self.compare_x >= 0 and self.compare_y >= 0:   # 1사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
-                        self.x = self.x - 2
+                        self.x = self.x - RUN_SPEED_PPS * game_framework.frame_time
                         self.y = self.y - playstate.player.dir_y * 5
                     elif self.monster_player_compare_x() == 2:
-                        self.x = (self.x - 2) - playstate.player.dir_x * 5
+                        self.x = (self.x - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * 5
                         if self.monster_player_compare_y() == 2:
                             self.y = self.y - playstate.player.dir_y * 5
                 else:
                     if self.monster_player_compare_y() == 1:
-                        self.y = self.y - 2
+                        self.y = self.y - RUN_SPEED_PPS * game_framework.frame_time
                         self.x = self.x - playstate.player.dir_x * 5
                     elif self.monster_player_compare_y() == 2:
-                        self.y = self.y - 2 - playstate.player.dir_y * 5
+                        self.y = (self.y - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * 5
                         if self.monster_player_compare_x() == 2:
                             self.x = self.x - playstate.player.dir_x * 5
 
@@ -116,65 +120,66 @@ class Spitty:
             elif self.compare_x >= 0 and self.compare_y <= 0: # 4사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
-                        self.x = self.x - 2
+                        self.x = self.x - RUN_SPEED_PPS * game_framework.frame_time
                         self.y = self.y - playstate.player.dir_y * 5
                     elif self.monster_player_compare_x() == 2:
-                        self.x = self.x - 2 - playstate.player.dir_x * 5
+                        self.x = (self.x - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * 5
                         if self.monster_player_compare_y() == 2:
                             self.y = self.y - playstate.player.dir_y * 5
                 else:
                     if self.monster_player_compare_y() == 1:
-                        self.y = self.y + 2
+                        self.y = self.y + RUN_SPEED_PPS * game_framework.frame_time
                         self.x = self.x - playstate.player.dir_x * 5
                     elif self.monster_player_compare_y() == 2:
-                        self.y = self.y + 2 - playstate.player.dir_y * 5
+                        self.y = (self.y + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * 5
                         if self.monster_player_compare_x() == 2:
                             self.x = self.x - playstate.player.dir_x * 5
 
             elif self.compare_x <= 0 and self.compare_y <= 0: # 3사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
-                        self.x = self.x + 2
+                        self.x = self.x + RUN_SPEED_PPS * game_framework.frame_time
                         self.y = self.y - playstate.player.dir_y * 5
                     elif self.monster_player_compare_x() == 2:
-                        self.x = (self.x + 2) - playstate.player.dir_x * 5
+                        self.x = (self.x + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * 5
                         if self.monster_player_compare_y() == 2:
                             self.y = self.y - playstate.player.dir_y * 5
                 else:
                     if self.monster_player_compare_y() == 1:
-                        self.y = self.y + 2
+                        self.y = self.y + RUN_SPEED_PPS * game_framework.frame_time
                         self.x = self.x - playstate.player.dir_x * 5
                     elif self.monster_player_compare_y() == 2:
-                        self.y = (self.y + 2) - playstate.player.dir_y * 5
+                        self.y = (self.y + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * 5
                         if self.monster_player_compare_x() == 2:
                             self.x = self.x - playstate.player.dir_x * 5
 
             elif self.compare_x <= 0 and self.compare_y >= 0: # 2사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
-                        self.x = self.x + 2
+                        self.x = self.x + RUN_SPEED_PPS * game_framework.frame_time
                         self.y = self.y - playstate.player.dir_y * 5
                     elif self.monster_player_compare_x() == 2:
-                        self.x = self.x + 2 - playstate.player.dir_x * 5
+                        self.x = (self.x + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * 5
                         if self.monster_player_compare_y() == 2:
                             self.y = self.y - playstate.player.dir_y * 5
 
                 else:
                     if self.monster_player_compare_y() == 1:
-                        self.y = self.y - 2
+                        self.y = self.y - RUN_SPEED_PPS * game_framework.frame_time
                         self.x = self.x - playstate.player.dir_x * 5
                     elif self.monster_player_compare_y() == 2:
-                        self.y = self.y - 2 - playstate.player.dir_y * 5
+                        self.y = (self.y - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * 5
                         if self.monster_player_compare_x() == 2:
                             self.x = self.x - playstate.player.dir_x * 5
 
 
 
         # 프레임 속도
-        self.frame_count += 1
-        if self.frame_count == 10:
-            self.frame = (self.frame + 1) % 4
-            self.frame_count = 0
+        # self.frame_count += 1
+        # if self.frame_count == 10:
+        #     self.frame = (self.frame + 1) % 4
+        #     self.frame_count = 0
+        self.frame = (self.frame + FRAMES_PER_ACTION + ACTION_PER_TIME + game_framework.frame_time) % FRAMES_PER_ACTION
 
     def draw(self):
         if self.monster_status == True:
@@ -183,45 +188,45 @@ class Spitty:
 
             if self.compare_x >= 0 and self.compare_y >= 0:  # 1사분면
                 if self.compare_x >= self.compare_y:
-                    self.image.clip_composite_draw(self.frame * 64, 64 * 3, self.WID, self.HEI,
+                    self.image.clip_composite_draw(int(self.frame) * 64, 64 * 3, self.WID, self.HEI,
                                                            3.141592, 'v', self.x, self.y, self.size, self.size)
                 else:
-                    self.image.clip_composite_draw(self.frame * 64, 64 * 1, self.WID,
+                    self.image.clip_composite_draw(int(self.frame) * 64, 64 * 1, self.WID,
                                                            self.HEI,
                                                            0, '', self.x, self.y, self.size, self.size)
 
             elif self.compare_x >= 0 and self.compare_y <= 0:  # 4사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
-                    self.image.clip_composite_draw(self.frame * 64, 64 * 3, self.WID,
+                    self.image.clip_composite_draw(int(self.frame) * 64, 64 * 3, self.WID,
                                                            self.HEI,
                                                            3.141592, 'v', self.x, self.y, self.size,
                                                            self.size)
                 else:
-                    self.image.clip_composite_draw(self.frame * 64, 64 * 2, self.WID,
+                    self.image.clip_composite_draw(int(self.frame) * 64, 64 * 2, self.WID,
                                                            self.HEI,
                                                            0, '', self.x, self.y, self.size,
                                                            self.size)
 
             elif self.compare_x <= 0 and self.compare_y <= 0:  # 3사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
-                    self.image.clip_composite_draw(self.frame * 64, 64 * 3, self.WID,
+                    self.image.clip_composite_draw(int(self.frame) * 64, 64 * 3, self.WID,
                                                            self.HEI,
                                                            0, '', self.x, self.y, self.size,
                                                            self.size)
                 else:
-                    self.image.clip_composite_draw(self.frame * 64, 64 * 2, self.WID,
+                    self.image.clip_composite_draw(int(self.frame) * 64, 64 * 2, self.WID,
                                                            self.HEI,
                                                            0, '', self.x, self.y, self.size,
                                                            self.size)
 
             elif self.compare_x <= 0 and self.compare_y >= 0:  # 2사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
-                    self.image.clip_composite_draw(self.frame * 64, 64 * 3, self.WID,
+                    self.image.clip_composite_draw(int(self.frame) * 64, 64 * 3, self.WID,
                                                            self.HEI,
                                                            0, '', self.x, self.y, self.size,
                                                            self.size)
                 else:
-                    self.image.clip_composite_draw(self.frame * 64, 64 * 1, self.WID,
+                    self.image.clip_composite_draw(int(self.frame) * 64, 64 * 1, self.WID,
                                                            self.HEI,
                                                            0, '', self.x, self.y, self.size,
                                                            self.size)
