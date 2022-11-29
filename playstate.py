@@ -76,7 +76,7 @@ def update():
     if player.HP == 0:
         game_framework.change_state(end_state)
 
-    if isaac.kill_cnt >= 5:     #보스 생성 조건
+    if isaac.kill_cnt >= 0:     #보스 생성 조건
         if boss_1 == False:
             monstros = Monstro()
             game_world.add_object(monstros, 1)

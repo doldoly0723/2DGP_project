@@ -4,6 +4,13 @@ import attack
 import random   # 몬스터의 출현
 import playstate
 
+PIXEL_PER_METER = (10.0 / 0.1)  #10 pixel 10cm
+RUN_SPEED_KMPH = 15.0   #Km / Hour
+
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 class Spitty:
     image = None
@@ -26,6 +33,7 @@ class Spitty:
 
         self.hp = 300
 
+        # 플레이어와 몬스터의 위치 비교
         self.compare_x = 0
         self.compare_y = 0
 
@@ -61,6 +69,8 @@ class Spitty:
                 elif self.choose_wall == 4: #오른쪽
                     self.x = MAP_WIDTH
                     self.y = random.randint(0, MAP_HEIGHT)
+                self.x = 200
+                self.y = 550
                 self.monster_status = True
         # self.sucker_x = 0
         # self.sucker_y = 0
@@ -69,80 +79,94 @@ class Spitty:
 
     def monster_player_compare_x(self):
         if playstate.player.map_x == self.end_of_left or playstate.player.map_x == self.end_of_right:
-            return 1    # 테두리에 있을때
+            return 1    # 플레이어가 테두리에 있을때
         else:
             return 2
     def monster_player_compare_y(self):
         if playstate.player.map_y == self.end_of_top or playstate.player.map_y == self.end_of_bottom:
-            return 1    # 테두리에 있을 떄
+            return 1    # 플레이어가 테두리에 있을 떄
         else:
             return 2
 
     def update(self):
         Spitty.respawn_monster(self)
         if self.monster_status == True:
-
             self.compare_x = self.x - self.mid_x
             self.compare_y = self.y - self.mid_y
             #몬스터는 x or y축 방향으로만 이동 가능
             if self.compare_x >= 0 and self.compare_y >= 0:   # 1사분면
-                if self.compare_x >= self.compare_y:
+                if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
                         self.x = self.x - 2
+                        self.y = self.y - playstate.player.dir_y * 5
                     elif self.monster_player_compare_x() == 2:
                         self.x = (self.x - 2) - playstate.player.dir_x * 5
-                        self.y = self.y - playstate.player.dir_y * 5
-
+                        if self.monster_player_compare_y() == 2:
+                            self.y = self.y - playstate.player.dir_y * 5
                 else:
                     if self.monster_player_compare_y() == 1:
                         self.y = self.y - 2
+                        self.x = self.x - playstate.player.dir_x * 5
                     elif self.monster_player_compare_y() == 2:
                         self.y = self.y - 2 - playstate.player.dir_y * 5
-                        self.x = self.x - playstate.player.dir_x * 5
+                        if self.monster_player_compare_x() == 2:
+                            self.x = self.x - playstate.player.dir_x * 5
 
 
             elif self.compare_x >= 0 and self.compare_y <= 0: # 4사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
                         self.x = self.x - 2
+                        self.y = self.y - playstate.player.dir_y * 5
                     elif self.monster_player_compare_x() == 2:
                         self.x = self.x - 2 - playstate.player.dir_x * 5
-                        self.y = self.y - playstate.player.dir_y * 5
+                        if self.monster_player_compare_y() == 2:
+                            self.y = self.y - playstate.player.dir_y * 5
                 else:
                     if self.monster_player_compare_y() == 1:
                         self.y = self.y + 2
+                        self.x = self.x - playstate.player.dir_x * 5
                     elif self.monster_player_compare_y() == 2:
                         self.y = self.y + 2 - playstate.player.dir_y * 5
-                        self.x = self.x - playstate.player.dir_x * 5
+                        if self.monster_player_compare_x() == 2:
+                            self.x = self.x - playstate.player.dir_x * 5
 
             elif self.compare_x <= 0 and self.compare_y <= 0: # 3사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
                         self.x = self.x + 2
+                        self.y = self.y - playstate.player.dir_y * 5
                     elif self.monster_player_compare_x() == 2:
                         self.x = (self.x + 2) - playstate.player.dir_x * 5
-                        self.y = self.y - playstate.player.dir_y * 5
+                        if self.monster_player_compare_y() == 2:
+                            self.y = self.y - playstate.player.dir_y * 5
                 else:
                     if self.monster_player_compare_y() == 1:
                         self.y = self.y + 2
+                        self.x = self.x - playstate.player.dir_x * 5
                     elif self.monster_player_compare_y() == 2:
                         self.y = (self.y + 2) - playstate.player.dir_y * 5
-                        self.x = self.x - playstate.player.dir_x * 5
+                        if self.monster_player_compare_x() == 2:
+                            self.x = self.x - playstate.player.dir_x * 5
 
             elif self.compare_x <= 0 and self.compare_y >= 0: # 2사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
                         self.x = self.x + 2
+                        self.y = self.y - playstate.player.dir_y * 5
                     elif self.monster_player_compare_x() == 2:
                         self.x = self.x + 2 - playstate.player.dir_x * 5
-                        self.y = self.y - playstate.player.dir_y * 5
+                        if self.monster_player_compare_y() == 2:
+                            self.y = self.y - playstate.player.dir_y * 5
 
                 else:
                     if self.monster_player_compare_y() == 1:
                         self.y = self.y - 2
+                        self.x = self.x - playstate.player.dir_x * 5
                     elif self.monster_player_compare_y() == 2:
                         self.y = self.y - 2 - playstate.player.dir_y * 5
-                        self.x = self.x - playstate.player.dir_x * 5
+                        if self.monster_player_compare_x() == 2:
+                            self.x = self.x - playstate.player.dir_x * 5
 
 
 
