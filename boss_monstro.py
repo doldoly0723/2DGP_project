@@ -81,8 +81,10 @@ class Monstro:
                 else:
                     self.y = ((1-self.monster_t)*self.y + self.monster_t*playstate.player.mid_y) - playstate.player.dir_y*5
             else:
-                self.x -= playstate.player.dir_x*5
-                self.y -= playstate.player.dir_y*5
+                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
+                    self.x -= playstate.player.dir_x*5
+                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
+                    self.y -= playstate.player.dir_y*5
 
         if self.pattern_status == False:
             self.choose_pattern = random.randint(1,10)
