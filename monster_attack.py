@@ -43,62 +43,78 @@ class Monster_Attack():
         if self.dir == 0:   #down
             self.y = (self.y - self.speed)
             if isaac.body_RL == True:
-                self.x -= playstate.player.dir_x * 5
+                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
+                    self.x -= playstate.player.dir_x * 5
             if isaac.body_UD == True:
-                self.y -= playstate.player.dir_y * 4
+                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
+                    self.y -= playstate.player.dir_y * 4
 
         elif self.dir == 1: #up
             self.y = (self.y + self.speed)
             if isaac.body_RL == True:
-                self.x -= playstate.player.dir_x * 5
+                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
+                    self.x -= playstate.player.dir_x * 5
             if isaac.body_UD == True:
-                self.y -= playstate.player.dir_y * 4
+                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
+                    self.y -= playstate.player.dir_y * 4
 
         elif self.dir == 2: #left
             self.x = (self.x - self.speed)
-            if isaac.body_UD == True:  # 공격 후 이동시 구체는 일정하게 이동
-                self.y -= playstate.player.dir_y * 5
-            if isaac.body_RL == True:  # 공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
-                self.x -= playstate.player.dir_x * 4
+            if isaac.body_RL == True:
+                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
+                    self.x -= playstate.player.dir_x * 5
+            if isaac.body_UD == True:
+                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
+                    self.y -= playstate.player.dir_y * 4
 
         elif self.dir == 3: #right
             self.x = (self.x + self.speed)
-            if isaac.body_UD == True:  # 공격 후 이동시 구체는 일정하게 이동
-                self.y -= playstate.player.dir_y * 5
-            if isaac.body_RL == True:  # 공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
-                self.x -= playstate.player.dir_x * 4
+            if isaac.body_RL == True:
+                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
+                    self.x -= playstate.player.dir_x * 5
+            if isaac.body_UD == True:
+                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
+                    self.y -= playstate.player.dir_y * 4
 
         elif self.dir == 4: #UL
             self.x -= self.speed
             self.y += self.speed
-            if isaac.body_UD == True:  # 공격 후 이동시 구체는 일정하게 이동
-                self.y -= playstate.player.dir_y * 5
-            if isaac.body_RL == True:  # 공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
-                self.x -= playstate.player.dir_x * 4
+            if isaac.body_RL == True:
+                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
+                    self.x -= playstate.player.dir_x * 5
+            if isaac.body_UD == True:
+                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
+                    self.y -= playstate.player.dir_y * 4
 
         elif self.dir == 5: # UR
             self.x += self.speed
             self.y += self.speed
-            if isaac.body_UD == True:  # 공격 후 이동시 구체는 일정하게 이동
-                self.y -= playstate.player.dir_y * 5
-            if isaac.body_RL == True:  # 공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
-                self.x -= playstate.player.dir_x * 4
+            if isaac.body_RL == True:
+                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
+                    self.x -= playstate.player.dir_x * 5
+            if isaac.body_UD == True:
+                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
+                    self.y -= playstate.player.dir_y * 4
 
         elif self.dir == 6: #DL
             self.x -= self.speed
             self.y -= self.speed
-            if isaac.body_UD == True:  # 공격 후 이동시 구체는 일정하게 이동
-                self.y -= playstate.player.dir_y * 5
-            if isaac.body_RL == True:  # 공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
-                self.x -= playstate.player.dir_x * 4
+            if isaac.body_RL == True:
+                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
+                    self.x -= playstate.player.dir_x * 5
+            if isaac.body_UD == True:
+                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
+                    self.y -= playstate.player.dir_y * 4
 
         elif self.dir == 7: #DR
             self.x += self.speed
             self.y -= self.speed
-            if isaac.body_UD == True:  # 공격 후 이동시 구체는 일정하게 이동
-                self.y -= playstate.player.dir_y * 5
-            if isaac.body_RL == True:  # 공격 방향과 같은 축으로 이동시 구체 진행 속도 조절
-                self.x -= playstate.player.dir_x * 4
+            if isaac.body_RL == True:
+                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
+                    self.x -= playstate.player.dir_x * 5
+            if isaac.body_UD == True:
+                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
+                    self.y -= playstate.player.dir_y * 4
 
 
 
