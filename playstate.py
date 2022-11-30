@@ -41,19 +41,19 @@ def enter():
 
     game_world.add_object(player, 0)
 
-    # suckers = [Sucker() for i in range(3)]
-    # game_world.add_objects(suckers, 1)
+    suckers = [Sucker() for i in range(3)]
+    game_world.add_objects(suckers, 1)
     #
-    spittys = [Spitty() for i in range(3)]
-    game_world.add_objects(spittys, 1)
+    # spittys = [Spitty() for i in range(3)]
+    # game_world.add_objects(spittys, 1)
     #
     # # 몬스터와 공격 충돌체크
-    # game_world.add_collision_pairs(None, suckers, 'tears:suckers')
-    game_world.add_collision_pairs(None, spittys, 'tears:spittys')
+    game_world.add_collision_pairs(None, suckers, 'tears:suckers')
+    # game_world.add_collision_pairs(None, spittys, 'tears:spittys')
     #
     # #몬스터와 캐릭터 충돌 체크
-    # game_world.add_collision_pairs(player, suckers, 'player:suckers')
-    game_world.add_collision_pairs(player, spittys, 'player:spittys')
+    game_world.add_collision_pairs(player, suckers, 'player:suckers')
+    # game_world.add_collision_pairs(player, spittys, 'player:spittys')
     #
     # #몬스터 공격과 플레이어 충돌 체크
     # game_world.add_collision_pairs(None, player, 'monster_tears:player')
