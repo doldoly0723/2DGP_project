@@ -22,7 +22,15 @@ monstros = None
 monster_tears = None
 
 boss_1 = False  #stage 1
+boss_2 = False
+boss_3 = False
+
 item_1 = False  #stage 1
+item_2 = False
+item_3 = False
+
+Round_2 = False
+Round_3 = False
 
 def handle_events():
     events = get_events()
@@ -62,7 +70,7 @@ def exit():
     game_world.clear()
 
 def update():
-    global monstros, boss_1, item_1
+    global monstros, boss_1, boss_2, boss_3, item_1, item_2, item_3, suckers, spittys, Round_2, Round_3
     for game_object in game_world.all_objects():
         game_object.update()
     for a, b, group in game_world.all_collision_pairs():
@@ -76,8 +84,9 @@ def update():
     if player.HP == 0:
         game_framework.change_state(end_state)
 
+    #1라운드
     if isaac.kill_cnt >= 5:     #보스 생성 조건
-        if boss_1 == False:
+        if boss_1 == False:     #보스 1번만 생성되도록
             monstros = Monstro()
             game_world.add_object(monstros, 1)
             game_world.add_collision_pairs(None, monstros, 'tears:monstros')
@@ -87,7 +96,39 @@ def update():
         if item_1 == False:
             game_framework.push_state(item_state)
             item_1 = True
+            Round_2 = True
+    # 2라운드
+    if Round_2 == True:
+        suckers = [Sucker() for i in range(5)]
+        game_world.add_objects(suckers, 1)
 
+        spittys = [Spitty() for i in range(5)]
+        game_world.add_objects(spittys, 1)
+
+        # 몬스터와 공격 충돌체크
+        game_world.add_collision_pairs(None, suckers, 'tears:suckers')
+        game_world.add_collision_pairs(None, spittys, 'tears:spittys')
+
+        # 몬스터와 캐릭터 충돌 체크
+        game_world.add_collision_pairs(player, suckers, 'player:suckers')
+        game_world.add_collision_pairs(player, spittys, 'player:spittys')
+        Round_2 = False
+
+    if isaac.kill_cnt >= 15:     #보스 생성 조건
+        if boss_2 == False:
+            monstros = [Monstro() for i in range(2)]
+            game_world.add_objects(monstros, 1)
+            game_world.add_collision_pairs(None, monstros, 'tears:monstros')
+            game_world.add_collision_pairs(player, monstros, 'player:monstros')
+            boss_2 = True
+    if isaac.boss_kill_cnt == 3:
+        if item_2 == False:
+            game_framework.push_state(item_state)
+            item_2 = True
+            Round_3 = True
+
+    # 3라운드
+    
 def draw_world():
     for game_object in game_world.all_objects():
         game_object.draw()
