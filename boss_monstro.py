@@ -5,10 +5,22 @@ import game_world
 import isaac
 import random   # 몬스터의 출현
 import playstate
+import game_framework
 import monster_attack
 from monster_attack import Monster_Attack
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 monster_tears = None
+
+PIXEL_PER_METER = (10.0 / 0.1)  #10 pixel 10cm
+RUN_SPEED_KMPH = 25.0   #Km / Hour
+
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# TIME_PER_ACTION = 10.0
+# ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+# FRAMES_PER_ACTION = 4
 
 class Monstro:
     image = None
@@ -70,21 +82,34 @@ class Monstro:
         if self.status == True:
             if self.frame == 7:
                 #self.monster_t += 0.00005  # 시간 지날수록 속도 증가
-                self.monster_t = 0.02   # monstro 속도 고정
+                # self.monster_t = 0.02   # monstro 속도 고정
+                self.dir = math.atan2(playstate.player.mid_y - self.y, playstate.player.mid_x - self.x)
                 if playstate.player.map_x == playstate.player.end_of_left or playstate.player.map_x == playstate.player.end_of_right:
-                    self.x = ((1 - self.monster_t) * self.x + self.monster_t * playstate.player.mid_x)
+                    self.x += RUN_SPEED_PPS * math.cos(self.dir)*game_framework.frame_time
                 else:
-                    self.x = ((1-self.monster_t)*self.x + self.monster_t*playstate.player.mid_x) - playstate.player.dir_x*5
+                    if playstate.player.injury_status == True:
+                        self.x += RUN_SPEED_PPS * math.cos(self.dir)*game_framework.frame_time - playstate.player.dir_x*isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                    else:
+                        self.x += RUN_SPEED_PPS * math.cos(self.dir)*game_framework.frame_time - playstate.player.dir_x*isaac.RUN_SPEED_PPS*game_framework.frame_time
 
                 if playstate.player.map_y == playstate.player.end_of_top or playstate.player.map_y == playstate.player.end_of_bottom:
-                    self.y = ((1 - self.monster_t) * self.y + self.monster_t * playstate.player.mid_y)
+                    self.y += RUN_SPEED_PPS * math.sin(self.dir) * game_framework.frame_time
                 else:
-                    self.y = ((1-self.monster_t)*self.y + self.monster_t*playstate.player.mid_y) - playstate.player.dir_y*5
+                    if playstate.player.injury_status == True:
+                        self.y += RUN_SPEED_PPS * math.sin(self.dir) * game_framework.frame_time - playstate.player.dir_y*isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                    else:
+                        self.y += RUN_SPEED_PPS * math.sin(self.dir) * game_framework.frame_time - playstate.player.dir_y*isaac.RUN_SPEED_PPS*game_framework.frame_time
             else:
                 if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                    self.x -= playstate.player.dir_x*5
+                    if playstate.player.injury_status == True:
+                        self.x -= playstate.player.dir_x*isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                    else:
+                        self.x -= playstate.player.dir_x * isaac.RUN_SPEED_PPS * game_framework.frame_time
                 if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                    self.y -= playstate.player.dir_y*5
+                    if playstate.player.injury_status == True:
+                        self.y -= playstate.player.dir_y*isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                    else:
+                        self.y -= playstate.player.dir_y * isaac.RUN_SPEED_PPS * game_framework.frame_time
 
         if self.pattern_status == False:
             self.choose_pattern = random.randint(1,10)

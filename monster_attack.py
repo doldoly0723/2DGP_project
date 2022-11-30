@@ -1,6 +1,7 @@
 from pico2d import*
 
 import attack
+import game_framework
 import isaac
 import monster_sucker
 from monster_sucker import Sucker
@@ -12,6 +13,13 @@ import boss_monstro
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 # 전체 맵 크기
 FULL_MAP_WID, FULL_MAP_HEI = 6401, 3600
+
+PIXEL_PER_METER = (10.0 / 0.1)  #10 pixel 10cm
+ATTACK_SPEED_KMPH = 23.0   #Km / Hour
+
+ATTACK_SPEED_MPM = (ATTACK_SPEED_KMPH * 1000.0 / 60.0)
+ATTACK_SPEED_MPS = (ATTACK_SPEED_MPM / 60.0)
+ATTACK_SPEED_PPS = (ATTACK_SPEED_MPS * PIXEL_PER_METER)
 
 class Monster_Attack():
     image = None
@@ -34,6 +42,20 @@ class Monster_Attack():
 
         #print('생성: ', self.attack_num)
 
+    def player_MonsterAttack_move(self):
+        if isaac.body_RL == True:
+            if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
+                if playstate.player.injury_status == True:
+                    self.x -= playstate.player.dir_x * isaac.INJURY_SPEED_PPS * game_framework.frame_time
+                else:
+                    self.x -= playstate.player.dir_x * isaac.RUN_SPEED_PPS * game_framework.frame_time
+        if isaac.body_UD == True:
+            if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
+                if playstate.player.injury_status == True:
+                    self.y -= playstate.player.dir_y * isaac.INJURY_SPEED_PPS * game_framework.frame_time
+                else:
+                    self.y -= playstate.player.dir_y * isaac.RUN_SPEED_PPS * game_framework.frame_time
+
     def update(self):
         global monster_attack_range
         self.range += 1
@@ -41,80 +63,40 @@ class Monster_Attack():
             game_world.remove_object(self)
 
         if self.dir == 0:   #down
-            self.y = (self.y - self.speed)
-            if isaac.body_RL == True:
-                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                    self.x -= playstate.player.dir_x * 5
-            if isaac.body_UD == True:
-                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                    self.y -= playstate.player.dir_y * 4
+            self.y -= ATTACK_SPEED_PPS * game_framework.frame_time
+            self.player_MonsterAttack_move()
 
         elif self.dir == 1: #up
-            self.y = (self.y + self.speed)
-            if isaac.body_RL == True:
-                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                    self.x -= playstate.player.dir_x * 5
-            if isaac.body_UD == True:
-                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                    self.y -= playstate.player.dir_y * 4
+            self.y += ATTACK_SPEED_PPS * game_framework.frame_time
+            self.player_MonsterAttack_move()
 
         elif self.dir == 2: #left
-            self.x = (self.x - self.speed)
-            if isaac.body_RL == True:
-                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                    self.x -= playstate.player.dir_x * 5
-            if isaac.body_UD == True:
-                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                    self.y -= playstate.player.dir_y * 4
+            self.x -= ATTACK_SPEED_PPS * game_framework.frame_time
+            self.player_MonsterAttack_move()
 
         elif self.dir == 3: #right
-            self.x = (self.x + self.speed)
-            if isaac.body_RL == True:
-                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                    self.x -= playstate.player.dir_x * 5
-            if isaac.body_UD == True:
-                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                    self.y -= playstate.player.dir_y * 4
+            self.x += ATTACK_SPEED_PPS * game_framework.frame_time
+            self.player_MonsterAttack_move()
 
         elif self.dir == 4: #UL
-            self.x -= self.speed
-            self.y += self.speed
-            if isaac.body_RL == True:
-                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                    self.x -= playstate.player.dir_x * 5
-            if isaac.body_UD == True:
-                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                    self.y -= playstate.player.dir_y * 4
+            self.x -= ATTACK_SPEED_PPS * game_framework.frame_time
+            self.y += ATTACK_SPEED_PPS * game_framework.frame_time
+            self.player_MonsterAttack_move()
 
         elif self.dir == 5: # UR
-            self.x += self.speed
-            self.y += self.speed
-            if isaac.body_RL == True:
-                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                    self.x -= playstate.player.dir_x * 5
-            if isaac.body_UD == True:
-                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                    self.y -= playstate.player.dir_y * 4
+            self.x += ATTACK_SPEED_PPS * game_framework.frame_time
+            self.y += ATTACK_SPEED_PPS * game_framework.frame_time
+            self.player_MonsterAttack_move()
 
         elif self.dir == 6: #DL
-            self.x -= self.speed
-            self.y -= self.speed
-            if isaac.body_RL == True:
-                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                    self.x -= playstate.player.dir_x * 5
-            if isaac.body_UD == True:
-                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                    self.y -= playstate.player.dir_y * 4
+            self.x -= ATTACK_SPEED_PPS * game_framework.frame_time
+            self.y -= ATTACK_SPEED_PPS * game_framework.frame_time
+            self.player_MonsterAttack_move()
 
         elif self.dir == 7: #DR
-            self.x += self.speed
-            self.y -= self.speed
-            if isaac.body_RL == True:
-                if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                    self.x -= playstate.player.dir_x * 5
-            if isaac.body_UD == True:
-                if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                    self.y -= playstate.player.dir_y * 4
+            self.x += ATTACK_SPEED_PPS * game_framework.frame_time
+            self.y -= ATTACK_SPEED_PPS * game_framework.frame_time
+            self.player_MonsterAttack_move()
 
 
 

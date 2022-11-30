@@ -85,12 +85,18 @@ class Sucker:
             if playstate.player.map_x == playstate.player.end_of_left or playstate.player.map_x == playstate.player.end_of_right:
                 self.x += RUN_SPEED_PPS * math.cos(self.dir)*game_framework.frame_time
             else:
-                self.x += RUN_SPEED_PPS * math.cos(self.dir)*game_framework.frame_time - playstate.player.dir_x*5
+                if playstate.player.injury_status == True:
+                    self.x += RUN_SPEED_PPS * math.cos(self.dir)*game_framework.frame_time - playstate.player.dir_x*isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                else:
+                    self.x += RUN_SPEED_PPS * math.cos(self.dir)*game_framework.frame_time - playstate.player.dir_x*isaac.RUN_SPEED_PPS*game_framework.frame_time
 
             if playstate.player.map_y == playstate.player.end_of_top or playstate.player.map_y == playstate.player.end_of_bottom:
                 self.y += RUN_SPEED_PPS * math.sin(self.dir)*game_framework.frame_time
             else:
-                self.y += RUN_SPEED_PPS * math.sin(self.dir)*game_framework.frame_time - playstate.player.dir_y*5
+                if playstate.player.injury_status == True:
+                    self.y += RUN_SPEED_PPS * math.sin(self.dir)*game_framework.frame_time - playstate.player.dir_y*isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                else:
+                    self.y += RUN_SPEED_PPS * math.sin(self.dir)*game_framework.frame_time - playstate.player.dir_y*isaac.RUN_SPEED_PPS*game_framework.frame_time
 
 
             # self.x += RUN_SPEED_PPS * math.cos(self.dir)*game_framework.frame_time

@@ -92,6 +92,17 @@ class Spitty:
         else:
             return 2
 
+    def player_sucker_move_x(self):
+        if playstate.player.injury_status == True:
+            self.x -= playstate.player.dir_x * isaac.INJURY_SPEED_PPS * game_framework.frame_time
+        else:
+            self.x -= playstate.player.dir_x * isaac.RUN_SPEED_PPS * game_framework.frame_time
+    def player_sucker_move_y(self):
+        if playstate.player.injury_status == True:
+            self.y -= playstate.player.dir_y * isaac.INJURY_SPEED_PPS * game_framework.frame_time
+        else:
+            self.y -= playstate.player.dir_y * isaac.RUN_SPEED_PPS * game_framework.frame_time
+
     def update(self):
         Spitty.respawn_monster(self)
         if self.monster_status == True:
@@ -102,75 +113,99 @@ class Spitty:
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
                         self.x = self.x - RUN_SPEED_PPS * game_framework.frame_time
-                        self.y = self.y - playstate.player.dir_y * 5
+                        self.player_sucker_move_y()
                     elif self.monster_player_compare_x() == 2:
-                        self.x = (self.x - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * 5
+                        if playstate.player.injury_status == True:
+                            self.x = (self.x - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                        else:
+                            self.x = (self.x - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * isaac.RUN_SPEED_PPS * game_framework.frame_time
                         if self.monster_player_compare_y() == 2:
-                            self.y = self.y - playstate.player.dir_y * 5
+                            self.player_sucker_move_y()
                 else:
                     if self.monster_player_compare_y() == 1:
                         self.y = self.y - RUN_SPEED_PPS * game_framework.frame_time
-                        self.x = self.x - playstate.player.dir_x * 5
+                        self.player_sucker_move_x()
                     elif self.monster_player_compare_y() == 2:
-                        self.y = (self.y - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * 5
+                        if playstate.player.injury_status == True:
+                            self.y = (self.y - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                        else:
+                            self.y = (self.y - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * isaac.RUN_SPEED_PPS * game_framework.frame_time
                         if self.monster_player_compare_x() == 2:
-                            self.x = self.x - playstate.player.dir_x * 5
+                            self.player_sucker_move_x()
 
 
             elif self.compare_x >= 0 and self.compare_y <= 0: # 4사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
                         self.x = self.x - RUN_SPEED_PPS * game_framework.frame_time
-                        self.y = self.y - playstate.player.dir_y * 5
+                        self.player_sucker_move_y()
                     elif self.monster_player_compare_x() == 2:
-                        self.x = (self.x - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * 5
+                        if playstate.player.injury_status == True:
+                            self.x = (self.x - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * isaac.INJURY_SPEED_PPS * game_framework.frame_time
+                        else:
+                            self.x = (self.x - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * isaac.RUN_SPEED_PPS * game_framework.frame_time
                         if self.monster_player_compare_y() == 2:
-                            self.y = self.y - playstate.player.dir_y * 5
+                            self.player_sucker_move_y()
                 else:
                     if self.monster_player_compare_y() == 1:
                         self.y = self.y + RUN_SPEED_PPS * game_framework.frame_time
-                        self.x = self.x - playstate.player.dir_x * 5
+                        self.player_sucker_move_x()
                     elif self.monster_player_compare_y() == 2:
-                        self.y = (self.y + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * 5
+                        if playstate.player.injury_status == True:
+                            self.y = (self.y + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * isaac.INJURY_SPEED_PPS * game_framework.frame_time
+                        else:
+                            self.y = (self.y + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * isaac.RUN_SPEED_PPS * game_framework.frame_time
                         if self.monster_player_compare_x() == 2:
-                            self.x = self.x - playstate.player.dir_x * 5
+                            self.player_sucker_move_x()
 
             elif self.compare_x <= 0 and self.compare_y <= 0: # 3사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
                         self.x = self.x + RUN_SPEED_PPS * game_framework.frame_time
-                        self.y = self.y - playstate.player.dir_y * 5
+                        self.player_sucker_move_y()
                     elif self.monster_player_compare_x() == 2:
-                        self.x = (self.x + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * 5
+                        if playstate.player.injury_status == True:
+                            self.x = (self.x + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                        else:
+                            self.x = (self.x + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * isaac.RUN_SPEED_PPS * game_framework.frame_time
                         if self.monster_player_compare_y() == 2:
-                            self.y = self.y - playstate.player.dir_y * 5
+                            self.player_sucker_move_y()
                 else:
                     if self.monster_player_compare_y() == 1:
                         self.y = self.y + RUN_SPEED_PPS * game_framework.frame_time
-                        self.x = self.x - playstate.player.dir_x * 5
+                        self.player_sucker_move_x()
                     elif self.monster_player_compare_y() == 2:
-                        self.y = (self.y + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * 5
+                        if playstate.player.injury_status == True:
+                            self.y = (self.y + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                        else:
+                            self.y = (self.y + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * isaac.RUN_SPEED_PPS*game_framework.frame_time
                         if self.monster_player_compare_x() == 2:
-                            self.x = self.x - playstate.player.dir_x * 5
+                            self.player_sucker_move_x()
 
             elif self.compare_x <= 0 and self.compare_y >= 0: # 2사분면
                 if abs(self.compare_x) >= abs(self.compare_y):
                     if self.monster_player_compare_x() == 1:
                         self.x = self.x + RUN_SPEED_PPS * game_framework.frame_time
-                        self.y = self.y - playstate.player.dir_y * 5
+                        self.player_sucker_move_y()
                     elif self.monster_player_compare_x() == 2:
-                        self.x = (self.x + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * 5
+                        if playstate.player.injury_status == True:
+                            self.x = (self.x + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                        else:
+                            self.x = (self.x + RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_x * isaac.RUN_SPEED_PPS*game_framework.frame_time
                         if self.monster_player_compare_y() == 2:
-                            self.y = self.y - playstate.player.dir_y * 5
+                            self.player_sucker_move_y()
 
                 else:
                     if self.monster_player_compare_y() == 1:
                         self.y = self.y - RUN_SPEED_PPS * game_framework.frame_time
-                        self.x = self.x - playstate.player.dir_x * 5
+                        self.player_sucker_move_x()
                     elif self.monster_player_compare_y() == 2:
-                        self.y = (self.y - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * 5
+                        if playstate.player.injury_status == True:
+                            self.y = (self.y - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * isaac.INJURY_SPEED_PPS*game_framework.frame_time
+                        else:
+                            self.y = (self.y - RUN_SPEED_PPS * game_framework.frame_time) - playstate.player.dir_y * isaac.RUN_SPEED_PPS*game_framework.frame_time
                         if self.monster_player_compare_x() == 2:
-                            self.x = self.x - playstate.player.dir_x * 5
+                            self.player_sucker_move_x()
 
 
 

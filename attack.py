@@ -14,7 +14,7 @@ MAP_WIDTH, MAP_HEIGHT = 1600, 900
 FULL_MAP_WID, FULL_MAP_HEI = 6401, 3600
 
 PIXEL_PER_METER = (10.0 / 0.1)  #10 pixel 10cm
-ATTACK_SPEED_KMPH = 20.0   #Km / Hour
+ATTACK_SPEED_KMPH = 23.0   #Km / Hour
 
 ATTACK_SPEED_MPM = (ATTACK_SPEED_KMPH * 1000.0 / 60.0)
 ATTACK_SPEED_MPS = (ATTACK_SPEED_MPM / 60.0)
@@ -84,10 +84,10 @@ class Attack():
                     self.y += ATTACK_SPEED_PPS * game_framework.frame_time
                     if isaac.body_UD == True:
                         if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                            self.y -= playstate.player.dir_y * 6
+                            self.y -= playstate.player.dir_y * isaac.RUN_SPEED_PPS*game_framework.frame_time
                     if isaac.body_RL == True:
                         if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                            self.x -= playstate.player.dir_x * 6
+                            self.x -= playstate.player.dir_x * isaac.RUN_SPEED_PPS*game_framework.frame_time
 
                 elif self.dir == 6:  #left
                     # self.x = (self.x - self.speed)
@@ -98,10 +98,10 @@ class Attack():
                     self.x -= ATTACK_SPEED_PPS * game_framework.frame_time
                     if isaac.body_UD == True:
                         if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                            self.y -= playstate.player.dir_y * 6
+                            self.y -= playstate.player.dir_y * isaac.RUN_SPEED_PPS*game_framework.frame_time
                     if isaac.body_RL == True:
                         if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                            self.x -= playstate.player.dir_x * 6
+                            self.x -= playstate.player.dir_x * isaac.RUN_SPEED_PPS*game_framework.frame_time
 
                 elif self.dir == 2:  #right
                     # self.x = (self.x + self.speed)
@@ -112,10 +112,10 @@ class Attack():
                     self.x += ATTACK_SPEED_PPS * game_framework.frame_time
                     if isaac.body_UD == True:
                         if playstate.player.map_y != playstate.player.end_of_top and playstate.player.map_y != playstate.player.end_of_bottom:
-                            self.y -= playstate.player.dir_y * 6
+                            self.y -= playstate.player.dir_y * isaac.RUN_SPEED_PPS*game_framework.frame_time
                     if isaac.body_RL == True:
                         if playstate.player.map_x != playstate.player.end_of_left and playstate.player.map_x != playstate.player.end_of_right:
-                            self.x -= playstate.player.dir_x * 6
+                            self.x -= playstate.player.dir_x * isaac.RUN_SPEED_PPS*game_framework.frame_time
 
 
     # 캐릭터 이동 및 공격 키 입력
