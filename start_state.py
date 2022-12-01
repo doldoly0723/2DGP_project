@@ -29,7 +29,7 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN:
             match event.key:
-                case pico2d.SDLK_ESCAPE: # item_num1
+                case pico2d.SDLK_ESCAPE: 
                     game_framework.quit()
-                case pico2d.SDLK_SPACE: #item_num2
+                case pico2d.SDLK_SPACE:
                     game_framework.change_state(playstate)

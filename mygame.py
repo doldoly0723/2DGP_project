@@ -5,5 +5,5 @@ import playstate
 import start_state
 
 pico2d.open_canvas(playstate.MAP_WIDTH, playstate.MAP_HEIGHT)
-game_framework.run(playstate)
+game_framework.run(start_state)
 pico2d.close_canvas()
