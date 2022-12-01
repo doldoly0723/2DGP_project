@@ -91,7 +91,7 @@ def update():
         game_framework.change_state(game_over_state)
 
     #1라운드
-    if isaac.kill_cnt >= 5:     #보스 생성 조건
+    if isaac.kill_cnt >= 0:     #보스 생성 조건
         if boss_1 == False:     #보스 1번만 생성되도록
             monstros = Monstro()
             game_world.add_object(monstros, 1)
@@ -167,7 +167,7 @@ def update():
             game_world.add_objects(monstros, 1)
             game_world.add_collision_pairs(None, monstros, 'tears:monstros')
             game_world.add_collision_pairs(player, monstros, 'player:monstros')
-            boss_2 = True
+            boss_3 = True
     if isaac.boss_kill_cnt == 6:
         #end_state
         game_framework.change_state(end_state)

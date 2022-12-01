@@ -113,6 +113,7 @@ class Monstro:
 
         if self.pattern_status == False:
             self.choose_pattern = random.randint(1,10)
+            #self.choose_pattern = 9
             #self.choose_pattern = 10
             self.pattern_status = True
 
