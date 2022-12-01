@@ -1,4 +1,5 @@
 from pico2d import*
+import winsound
 
 import attack
 import game_framework
