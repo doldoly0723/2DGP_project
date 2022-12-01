@@ -4,7 +4,7 @@ import isaac
 import game_world
 import monster_sucker
 import item_state
-import end_state
+import game_over_state
 
 from isaac import Player
 from monster_sucker import Sucker
@@ -29,6 +29,10 @@ item_1 = False  #stage 1
 item_2 = False
 item_3 = False
 
+Round_2_respawn = False
+Round_3_respawn = False
+
+Round_1 = True
 Round_2 = False
 Round_3 = False
 
@@ -70,7 +74,8 @@ def exit():
     game_world.clear()
 
 def update():
-    global monstros, boss_1, boss_2, boss_3, item_1, item_2, item_3, suckers, spittys, Round_2, Round_3
+    global monstros, boss_1, boss_2, boss_3, item_1, item_2, item_3, suckers, spittys, Round_2_respawn, Round_3_respawn
+    global Round_1, Round_2, Round_3
     for game_object in game_world.all_objects():
         game_object.update()
     for a, b, group in game_world.all_collision_pairs():
@@ -82,7 +87,7 @@ def update():
 
 
     if player.HP == 0:
-        game_framework.change_state(end_state)
+        game_framework.change_state(game_over_state)
 
     #1라운드
     if isaac.kill_cnt >= 5:     #보스 생성 조건
@@ -96,9 +101,12 @@ def update():
         if item_1 == False:
             game_framework.push_state(item_state)
             item_1 = True
+            Round_2_respawn = True
+            # 맵 다른거 그리기 위해
+            Round_1 = False
             Round_2 = True
     # 2라운드
-    if Round_2 == True:
+    if Round_2_respawn == True:
         suckers = [Sucker() for i in range(5)]
         game_world.add_objects(suckers, 1)
 
@@ -112,7 +120,7 @@ def update():
         # 몬스터와 캐릭터 충돌 체크
         game_world.add_collision_pairs(player, suckers, 'player:suckers')
         game_world.add_collision_pairs(player, spittys, 'player:spittys')
-        Round_2 = False
+        Round_2_respawn = False
 
     if isaac.kill_cnt >= 15:     #보스 생성 조건
         if boss_2 == False:
@@ -125,10 +133,38 @@ def update():
         if item_2 == False:
             game_framework.push_state(item_state)
             item_2 = True
+            Round_3_respawn = True
+            Round_2 = False
             Round_3 = True
 
     # 3라운드
-    
+    if Round_3_respawn == True:
+        suckers = [Sucker() for i in range(7)]
+        game_world.add_objects(suckers, 1)
+
+        spittys = [Spitty() for i in range(7)]
+        game_world.add_objects(spittys, 1)
+
+        # 몬스터와 공격 충돌체크
+        game_world.add_collision_pairs(None, suckers, 'tears:suckers')
+        game_world.add_collision_pairs(None, spittys, 'tears:spittys')
+
+        # 몬스터와 캐릭터 충돌 체크
+        game_world.add_collision_pairs(player, suckers, 'player:suckers')
+        game_world.add_collision_pairs(player, spittys, 'player:spittys')
+        Round_3_respawn = False
+
+    if isaac.kill_cnt >= 50:     #보스 생성 조건
+        if boss_3 == False:
+            monstros = [Monstro() for i in range(3)]
+            game_world.add_objects(monstros, 1)
+            game_world.add_collision_pairs(None, monstros, 'tears:monstros')
+            game_world.add_collision_pairs(player, monstros, 'player:monstros')
+            boss_2 = True
+    if isaac.boss_kill_cnt == 6:
+        #end_state
+        pass
+
 def draw_world():
     for game_object in game_world.all_objects():
         game_object.draw()

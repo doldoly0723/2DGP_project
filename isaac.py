@@ -164,7 +164,14 @@ class MOVE_ATTACK:
         self.body_frame = (self.body_frame + BODY_FRAMES_PER_ACTION * BODY_ACTION_PER_TIME * game_framework.frame_time) % 10
 
     def draw(self):
-        self.image_map.clip_draw(int(self.map_x), int(self.map_y), MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+        if playstate.Round_1 == True:
+            self.image_map.clip_draw(int(self.map_x), int(self.map_y), MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+        elif playstate.Round_2 == True:
+            self.image_map2.clip_draw(int(self.map_x), int(self.map_y), MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+        elif playstate.Round_3 == True:
+            self.image_map3.clip_draw(int(self.map_x), int(self.map_y), MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+
+
         # 몸
         if (self.frame_body_reverse == 0):
             self.image_isaac.clip_draw(int(self.body_frame) * self.body_WID + self.body_x, self.body_y, self.body_WID,
@@ -221,7 +228,13 @@ class INJURY:
             self.add_event(TIMER)
 
     def draw(self):
-        self.image_map.clip_draw(int(self.map_x), int(self.map_y), MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+        if playstate.Round_1 == True:
+            self.image_map.clip_draw(int(self.map_x), int(self.map_y), MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+        elif playstate.Round_2 == True:
+            self.image_map2.clip_draw(int(self.map_x), int(self.map_y), MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+        elif playstate.Round_3 == True:
+            self.image_map3.clip_draw(int(self.map_x), int(self.map_y), MAP_WIDTH, MAP_HEIGHT, self.mid_x, self.mid_y)
+
         self.image_isaac.clip_draw(30, 45, 90, 105, self.mid_x, self.mid_y)
 
         for i in range(self.HP):
@@ -261,6 +274,8 @@ class Player:
             self.add_event(key_event)
     def __init__(self):
         self.image_map = load_image('map.png')
+        self.image_map2 = load_image('map2.png')
+        self.image_map3 = load_image('map3.png')
         self.image_isaac = load_image('isaac.png')
         self.image_isaac_reverse = load_image('isaac_reverse.png')
         self.image_heart = load_image('heart.png')
