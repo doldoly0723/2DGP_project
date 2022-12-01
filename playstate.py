@@ -5,6 +5,7 @@ import game_world
 import monster_sucker
 import item_state
 import game_over_state
+import end_state
 
 from isaac import Player
 from monster_sucker import Sucker
@@ -98,6 +99,7 @@ def update():
             game_world.add_collision_pairs(player, monstros, 'player:monstros')
             boss_1 = True
     if isaac.boss_kill_cnt == 1:
+
         if item_1 == False:
             game_framework.push_state(item_state)
             item_1 = True
@@ -105,6 +107,7 @@ def update():
             # 맵 다른거 그리기 위해
             Round_1 = False
             Round_2 = True
+
     # 2라운드
     if Round_2_respawn == True:
         suckers = [Sucker() for i in range(5)]
@@ -122,7 +125,7 @@ def update():
         game_world.add_collision_pairs(player, spittys, 'player:spittys')
         Round_2_respawn = False
 
-    if isaac.kill_cnt >= 15:     #보스 생성 조건
+    if isaac.kill_cnt >= 20:     #보스 생성 조건
         if boss_2 == False:
             monstros = [Monstro() for i in range(2)]
             game_world.add_objects(monstros, 1)
@@ -130,6 +133,10 @@ def update():
             game_world.add_collision_pairs(player, monstros, 'player:monstros')
             boss_2 = True
     if isaac.boss_kill_cnt == 3:
+        if item_2 == True and item_3 == False:
+            game_framework.push_state(item_state)
+            item_3 = True
+
         if item_2 == False:
             game_framework.push_state(item_state)
             item_2 = True
@@ -163,7 +170,7 @@ def update():
             boss_2 = True
     if isaac.boss_kill_cnt == 6:
         #end_state
-        pass
+        game_framework.change_state(end_state)
 
 def draw_world():
     for game_object in game_world.all_objects():
