@@ -1,4 +1,6 @@
 from pico2d import*
+
+import boss_monstro
 import game_framework
 import isaac
 import game_world
@@ -6,6 +8,8 @@ import monster_sucker
 import item_state
 import game_over_state
 import end_state
+import attack
+import monster_attack
 
 from isaac import Player
 from monster_sucker import Sucker
@@ -100,6 +104,66 @@ def enter():
 def exit():
     game_world.clear()
 
+def reset():
+    global player, suckers, tears, spittys, monstros, monster_tears, boss_1, boss_2, boss_3, item_1, item_2, item_3
+    global Round_1, Round_2, Round_3, Round_2_respawn, Round_3_respawn, item_sound
+    global stage1_sound, stage2_sound, stage3_sound, stage1_sound_check, stage2_sound_check, stage3_sound_check
+    game_world.remove_all_objects()
+    # for gameobject in game_world.all_objects():
+    #     game_world.remove_object(gameobject)
+    player = None
+    suckers = None
+    tears = None
+    spittys = None
+    monstros = None
+    monster_tears = None
+    boss_1 = False  # stage 1
+    boss_2 = False
+    boss_3 = False
+    item_1 = False  # stage 1
+    item_2 = False
+    item_3 = False
+    Round_2_respawn = False
+    Round_3_respawn = False
+    Round_1 = True
+    Round_2 = False
+    Round_3 = False
+    # item_sound = None
+    # stage1_sound = None
+    # stage2_sound = None
+    # stage3_sound = None
+    stage1_sound_check = False
+    stage2_sound_check = False
+    stage3_sound_check = False
+
+    item_state.image = None
+    item_state.press_image = None
+    item_state.item_choose = False
+    item_state.item_num1 = None
+    item_state.item_num2 = None
+    item_state.item_num3 = None
+    item_state.item_sound = None
+
+    boss_monstro.monster_tears = None
+
+    attack.attack_on = False
+    attack.body_dir = 0
+    attack.attack_cnt = 0  # 공격 횟수
+    attack.attack_max = 5
+    attack.attack_damage = 100
+    attack.attack_range = 100
+    attack.attack_size = 40
+
+    monster_attack.attack_on = False
+    monster_attack.body_dir = 0
+    monster_attack.monster_attack_range = 200
+    monster_attack.monster_attack_damage = 100
+
+    isaac.body_RL = False
+    isaac.body_UD = False
+    isaac.kill_cnt = 0
+    isaac.boss_kill_cnt = 0
+
 def update():
     global monstros, boss_1, boss_2, boss_3, item_1, item_2, item_3, suckers, spittys, Round_2_respawn, Round_3_respawn
     global Round_1, Round_2, Round_3
@@ -108,11 +172,16 @@ def update():
         game_object.update()
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
+            # print(group)
+            # print(b)
             b.handle_collision(a, group)
             a.handle_collision(b, group)
 
 
-    if player.HP == 0:
+    if player.HP == 4:
+        for obj in game_world.all_objects():
+            game_world.remove_object(obj)
+        reset()
         game_framework.change_state(game_over_state)
 
     #1라운드

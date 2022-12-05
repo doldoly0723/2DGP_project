@@ -140,9 +140,6 @@ class Sucker:
         if group == 'player:suckers':
             if other.injury_status == False:
                 self.hp -= playstate.player.damage
-                print('asdfsdafdsafdasf')
-                print(self.get_bb())
-                print(other.get_bb())
                 la, ba, ra, ta = self.get_bb()
                 lb, bb, rb, tb = other.get_bb()
 
@@ -159,8 +156,6 @@ class Sucker:
                     isaac.kill_cnt += 1     # 보스 출현을 위한 킬 카운트
                     self.monster_status = False
 
-
-monster = None
 
 
 

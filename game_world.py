@@ -25,6 +25,15 @@ def all_objects():
         for o in layer:
             yield o # 제러레이터, 모든 객체들을 하나씩 넘겨준다.
 
+def remove_all_objects():
+    for layer in objects:
+        for o in layer:
+            print(o)
+            layer.remove(o)
+            remove_collision_objecct(o)
+            del(o)
+
+
 
 def monster_tears_objects():
     for o in objects[3][:]:
@@ -69,3 +78,5 @@ def remove_collision_objecct(o):
     for pairs in collision_group.values():
         if o in pairs[0]: pairs[0].remove(o)
         elif o in pairs[1]: pairs[1].remove(o)
+
+

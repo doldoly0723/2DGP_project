@@ -287,8 +287,6 @@ class Spitty:
         if group == 'player:spittys':
             if other.injury_status == False:
                 self.hp -= playstate.player.damage
-                print(self.get_bb())
-                print(other.get_bb())
                 la, ba, ra, ta = self.get_bb()
                 lb, bb, rb, tb = other.get_bb()
 

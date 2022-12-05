@@ -1,10 +1,7 @@
 import game_framework
 from pico2d import *
 
-import isaac
 import playstate
-import attack
-import boss_monstro
 
 
 # fill here
@@ -14,7 +11,7 @@ MAP_WIDTH, MAP_HEIGHT = 1600, 900
 
 def enter():
     global image, press_image
-    image = load_image('gameover_state.png')
+    image = load_image('Sprite/gameover_state.png')
 
 def exit():
     global image
@@ -38,9 +35,9 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN:
             match event.key:
-                case pico2d.SDLK_ESCAPE: # item_num1
+                case pico2d.SDLK_ESCAPE: # 종료
                     game_framework.quit()
-                case pico2d.SDLK_r: #item_num2
+                case pico2d.SDLK_r: # 재시작
                     game_framework.change_state(playstate)
 
 
