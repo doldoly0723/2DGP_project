@@ -51,6 +51,7 @@ body_RL = False
 body_UD = False
 class MOVE_ATTACK:
     def enter(self, event):
+
         global body_UD, body_RL
         if event == WD:
             self.dir_y += 1
@@ -79,6 +80,7 @@ class MOVE_ATTACK:
         if event == UP_D:
             self.frame_head = 4
             if attack.attack_cnt < attack.attack_max:
+                Player.attack_sound.play()
                 attack.attack_on = True
                 attack.attack_cnt += 1
                 playstate.tears = attack.Attack()
@@ -90,6 +92,7 @@ class MOVE_ATTACK:
         elif event == DOWN_D:
             self.frame_head = 0
             if attack.attack_cnt < attack.attack_max:
+                Player.attack_sound.play()
                 attack.attack_on = True
                 attack.attack_cnt += 1
                 playstate.tears = attack.Attack()
@@ -102,6 +105,7 @@ class MOVE_ATTACK:
         elif event == LEFT_D:
             self.frame_head = 6
             if attack.attack_cnt < attack.attack_max:
+                Player.attack_sound.play()
                 attack.attack_on = True
                 attack.attack_cnt += 1
                 playstate.tears = attack.Attack()
@@ -114,6 +118,7 @@ class MOVE_ATTACK:
         elif event == RIGHT_D:
             self.frame_head = 2
             if attack.attack_cnt < attack.attack_max:
+                Player.attack_sound.play()
                 attack.attack_on = True
                 attack.attack_cnt += 1
                 playstate.tears = attack.Attack()
@@ -264,6 +269,8 @@ kill_cnt = 0
 boss_kill_cnt = 0
 
 class Player:
+    attack_sound = None
+    injury_sound = None
 
     def add_event(self, event):
         self.q.insert(0, event)
@@ -273,13 +280,13 @@ class Player:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
     def __init__(self):
-        self.image_map = load_image('map.png')
-        self.image_map2 = load_image('map2.png')
-        self.image_map3 = load_image('map3.png')
-        self.image_isaac = load_image('isaac.png')
-        self.image_isaac_reverse = load_image('isaac_reverse.png')
-        self.image_heart = load_image('heart.png')
-        self.image_attack = load_image('tear.png')
+        self.image_map = load_image('Sprite/map.png')
+        self.image_map2 = load_image('Sprite/map2.png')
+        self.image_map3 = load_image('Sprite/map3.png')
+        self.image_isaac = load_image('Sprite/isaac.png')
+        self.image_isaac_reverse = load_image('Sprite/isaac_reverse.png')
+        self.image_heart = load_image('Sprite/heart.png')
+        self.image_attack = load_image('Sprite/tear.png')
 
         self.mid_x = MAP_WIDTH // 2
         self.mid_y = MAP_HEIGHT // 2
@@ -326,6 +333,14 @@ class Player:
 
         self.injury_status = False
 
+        if Player.attack_sound is None:
+            Player.attack_sound = load_wav('Sound/Tears_Fire.wav')
+            Player.attack_sound.set_volume(32)
+
+        if Player.injury_sound is None:
+            Player.injury_sound = load_wav('Sound/Isaac_Hurt.wav')
+            Player.injury_sound.set_volume(40)
+
 
     def update(self):
         self.cur_state.do(self, None)
@@ -346,6 +361,7 @@ class Player:
 
     def handle_collision(self, other, group):
         if self.injury_status == False:
+            Player.injury_sound.play()
             self.HP -= 1
             self.timer = 150 # 무적시간
             self.add_event(Injury)

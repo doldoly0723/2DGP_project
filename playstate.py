@@ -37,6 +37,17 @@ Round_1 = True
 Round_2 = False
 Round_3 = False
 
+item_sound = None
+
+stage1_sound = None
+stage2_sound = None
+stage3_sound = None
+
+stage1_sound_check = False
+stage2_sound_check = False
+stage3_sound_check = False
+
+
 def handle_events():
     events = get_events()
     for event in events:
@@ -49,6 +60,7 @@ def handle_events():
 
 def enter():
     global player, suckers, tears, spittys
+    global item_sound, stage1_sound, stage2_sound, stage3_sound
     player = Player()
     tears = Attack()
 
@@ -71,18 +83,31 @@ def enter():
     #몬스터 공격과 플레이어 충돌 체크
     game_world.add_collision_pairs(None, player, 'monster_tears:player')
 
+    item_sound = load_wav('Sound/item.wav')
+    item_sound.set_volume(30)
+
+    stage1_sound = load_music('Sound/stage_1.mp3')
+    stage1_sound.set_volume(25)
+
+    stage2_sound = load_music('Sound/stage_2.mp3')
+    stage2_sound.set_volume(25)
+
+    stage3_sound = load_music('Sound/stage_3.mp3')
+    stage3_sound.set_volume(25)
+
+
+
 def exit():
     game_world.clear()
 
 def update():
     global monstros, boss_1, boss_2, boss_3, item_1, item_2, item_3, suckers, spittys, Round_2_respawn, Round_3_respawn
     global Round_1, Round_2, Round_3
+    global item_sound, stage1_sound, stage2_sound, stage3_sound, stage1_sound_check, stage2_sound_check, stage3_sound_check
     for game_object in game_world.all_objects():
         game_object.update()
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
-
-            print('COLLISION', group)
             b.handle_collision(a, group)
             a.handle_collision(b, group)
 
@@ -91,7 +116,11 @@ def update():
         game_framework.change_state(game_over_state)
 
     #1라운드
-    if isaac.kill_cnt >= 0:     #보스 생성 조건
+    if stage1_sound_check == False:
+        stage1_sound.repeat_play()
+        stage1_sound_check = True
+
+    if isaac.kill_cnt >= 5:     #보스 생성 조건
         if boss_1 == False:     #보스 1번만 생성되도록
             monstros = Monstro()
             game_world.add_object(monstros, 1)
@@ -99,8 +128,8 @@ def update():
             game_world.add_collision_pairs(player, monstros, 'player:monstros')
             boss_1 = True
     if isaac.boss_kill_cnt == 1:
-
         if item_1 == False:
+            stage1_sound.stop()
             game_framework.push_state(item_state)
             item_1 = True
             Round_2_respawn = True
@@ -109,6 +138,10 @@ def update():
             Round_2 = True
 
     # 2라운드
+    if stage2_sound_check == False and Round_2 == True:
+        stage2_sound.repeat_play()
+        stage2_sound_check = True
+
     if Round_2_respawn == True:
         suckers = [Sucker() for i in range(5)]
         game_world.add_objects(suckers, 1)
@@ -136,15 +169,22 @@ def update():
         if item_2 == True and item_3 == False:
             game_framework.push_state(item_state)
             item_3 = True
+            item_sound.play()
 
         if item_2 == False:
+            stage2_sound.stop()
             game_framework.push_state(item_state)
             item_2 = True
             Round_3_respawn = True
             Round_2 = False
             Round_3 = True
 
+
     # 3라운드
+    if stage3_sound_check == False and Round_3 == True:
+        stage3_sound.repeat_play()
+        stage3_sound_check = True
+
     if Round_3_respawn == True:
         suckers = [Sucker() for i in range(7)]
         game_world.add_objects(suckers, 1)
@@ -161,7 +201,7 @@ def update():
         game_world.add_collision_pairs(player, spittys, 'player:spittys')
         Round_3_respawn = False
 
-    if isaac.kill_cnt >= 50:     #보스 생성 조건
+    if isaac.kill_cnt >= 60:     #보스 생성 조건
         if boss_3 == False:
             monstros = [Monstro() for i in range(3)]
             game_world.add_objects(monstros, 1)

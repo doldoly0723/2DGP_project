@@ -19,9 +19,11 @@ TIME_PER_ACTION = 10.0
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 2
 
+
 class Sucker:
     image = None
     reverse_image = None
+    death_sound = None
     def __init__(self):
         self.WID = 80
         self.HEI = 80
@@ -33,9 +35,9 @@ class Sucker:
         self.monster_status = False  # 현재 존재하는가
 
         if Sucker.image == None:
-            Sucker.image = load_image('sucker.png')
+            Sucker.image = load_image('Sprite/sucker.png')
         if Sucker.reverse_image == None:
-            Sucker.reverse_image = load_image('sucker_reverse.png')
+            Sucker.reverse_image = load_image('Sprite/sucker_reverse.png')
 
         self.frame = 0
         self.frame_count = 0
@@ -46,6 +48,10 @@ class Sucker:
 
         self.hp = 200
         self.dir = 0
+
+        if Sucker.death_sound is None:
+            Sucker.death_sound = load_wav('Sound/Death_sucker.wav')
+            Sucker.death_sound.set_volume(15)
 
     def respawn_sucker(self):
         if self.monster_status == False:
@@ -128,6 +134,7 @@ class Sucker:
         if group == 'tears:suckers':
             self.hp -= attack.attack_damage
             if self.hp <= 0:
+                Sucker.death_sound.play()
                 isaac.kill_cnt += 1
                 self.monster_status = False
         if group == 'player:suckers':

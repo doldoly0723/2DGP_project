@@ -23,9 +23,10 @@ ATTACK_SPEED_PPS = (ATTACK_SPEED_MPS * PIXEL_PER_METER)
 
 class Attack():
     image = None
+    impact_sound = None
     def __init__(self):
         if Attack.image == None:
-            Attack.image = load_image('tear.png')
+            Attack.image = load_image('Sprite/tear.png')
 
         self.frame_x = 347
         self.frame_y = 39
@@ -40,6 +41,9 @@ class Attack():
         # 공격 범위 나중에 설정
         self.range = 0
 
+        if Attack.impact_sound == None:
+            Attack.impact_sound = load_wav('Sound/Tear_Impacts.wav')
+            Attack.impact_sound.set_volume(30)
 
     def update(self):
         global tears, attack_cnt, attack_range
@@ -136,6 +140,7 @@ class Attack():
     def handle_collision(self, other, group):
         global attack_cnt
         if group == 'tears:suckers' or group == 'tears:spittys' or 'tears:monstros':
+            Attack.impact_sound.play()
             attack_cnt -= 1
             game_world.remove_object(self)
 attack_on = False

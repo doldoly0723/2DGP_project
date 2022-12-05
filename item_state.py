@@ -19,20 +19,26 @@ item_WEI = 130
 item_HIE = 150
 item = { 1: 'damege_up', 2: 'range_up', 3: 'max_attack_up', 4: 'heart_up', 5: 'attack_size_up'}
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
+item_sound = None
 
 def enter():
-    global image, press_image
-    image = load_image('item1.png')
-    press_image = load_image('press_num.png')
+    global image, press_image, item_sound
+    image = load_image('Sprite/item1.png')
+    press_image = load_image('Sprite/press_num.png')
+
+    item_sound = load_wav('Sound/item.wav')
+    item_sound.set_volume(30)
+
     # fill here
     pass
 
 def exit():
-    global image
+    global image, item_sound
     del image
     # 아이템 상태 빠져나갈때 초기화
     playstate.player.dir_x = 0
     playstate.player.dir_y = 0
+    item_sound.play()
     # fill here
     pass
 

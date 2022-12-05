@@ -23,9 +23,10 @@ ATTACK_SPEED_PPS = (ATTACK_SPEED_MPS * PIXEL_PER_METER)
 
 class Monster_Attack():
     image = None
+
     def __init__(self):
         if Monster_Attack.image == None:
-            Monster_Attack.image = load_image('monster_tear.png')
+            Monster_Attack.image = load_image('Sprite/monster_tear.png')
 
         self.frame_x = 340
         self.frame_y = 39
@@ -39,6 +40,8 @@ class Monster_Attack():
         self.range = 0
         self.damage = 100
         self.dir = 0
+
+
 
         #print('생성: ', self.attack_num)
 

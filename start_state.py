@@ -4,13 +4,18 @@ import playstate
 
 image = None
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
+sound = None
 
 
 def enter():
-    global image, press_image
-    image = load_image('start.png')
+    global image, press_image, sound
+    image = load_image('Sprite/start.png')
+    sound = load_music('Sound/start.mp3')
+    sound.set_volume(35)
+    sound.repeat_play()
 
 def exit():
+    sound.stop()
     global image
     del image
 

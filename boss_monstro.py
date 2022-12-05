@@ -25,6 +25,9 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 class Monstro:
     image = None
     reverse_image = None
+    boss_attack = None
+    boss_jump = None
+    death_sound = None
     def __init__(self):
         self.WID = 80
         self.HEI = 90
@@ -36,7 +39,7 @@ class Monstro:
         self.status = False  # 현재 존재하는가
 
         if Monstro.image == None:
-            Monstro.image = load_image('Monstro.png')
+            Monstro.image = load_image('Sprite/Monstro.png')
         self.frame = 0
         self.frame_count = 0
 
@@ -54,6 +57,22 @@ class Monstro:
 
         self.attack_status = False
         self.tear_num = 0
+
+        self.boss_intro = load_wav('Sound/boss_intro.wav')
+        self.boss_intro.set_volume(25)
+        self.boss_intro.play()
+
+
+        if Monstro.boss_attack is None:
+            Monstro.boss_attack = load_wav('Sound/boss_attack.wav')
+            Monstro.boss_attack.set_volume(30)
+        if Monstro.boss_jump is None:
+            Monstro.boss_jump = load_wav('Sound/boss_jump.wav')
+            Monstro.boss_jump.set_volume(20)
+
+        if Monstro.death_sound is None:
+            Monstro.death_sound = load_wav('Sound/Death_boss.wav')
+            Monstro.death_sound.set_volume(35)
 
     def respawn_monstro(self):
         if self.status == False:
@@ -123,6 +142,8 @@ class Monstro:
 
                 # 패턴 프레임 속도
                 if self.frame == 7:
+                    if self.frame_count == 0:
+                        Monstro.boss_jump.play()
                     self.frame_count += 1
                 else:
                     self.frame_count += 5
@@ -159,6 +180,7 @@ class Monstro:
                         tear.x = self.x
                         tear.y = self.y
                         self.tear_num += 1
+                    Monstro.boss_attack.play()
                     game_world.add_collision_pairs(monster_tears, None, 'monster_tears:player')
 
                     self.attack_status = True
@@ -211,14 +233,13 @@ class Monstro:
         if group == 'tears:monstros':
             self.hp -= attack.attack_damage
             if self.hp <= 0:
+                Monstro.death_sound.play()
                 isaac.boss_kill_cnt += 1
                 game_world.remove_object(self)
                 #self.status = False
         if group == 'player:monstros':
             if other.injury_status == False:
                 self.hp -= playstate.player.damage
-                print(self.get_bb())
-                print(other.get_bb())
                 la, ba, ra, ta = self.get_bb()
                 lb, bb, rb, tb = other.get_bb()
 
@@ -232,7 +253,7 @@ class Monstro:
                     self.y += 100
 
                 if self.hp <= 0:
-                    print('remove')
+                    Monstro.death_sound.play()
                     isaac.boss_kill_cnt += 1
                     game_world.remove_object(self)
                     #self.status = False

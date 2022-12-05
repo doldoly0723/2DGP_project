@@ -20,6 +20,7 @@ FRAMES_PER_ACTION = 4
 MAP_WIDTH, MAP_HEIGHT = 1600, 900
 class Spitty:
     image = None
+    death_sound = None
     def __init__(self):
         self.WID = 64
         self.HEI = 64
@@ -30,7 +31,7 @@ class Spitty:
         self.y = 0
         self.monster_status = False  # 현재 존재하는가
         if Spitty.image == None:
-            Spitty.image = load_image('spitty.png')
+            Spitty.image = load_image('Sprite/spitty.png')
 
         self.frame = 0
         self.frame_count = 0
@@ -52,6 +53,10 @@ class Spitty:
         self.end_of_right = 4800
         self.end_of_top = 2725
         self.end_of_bottom = 0
+
+        if Spitty.death_sound is None:
+            Spitty.death_sound = load_wav('Sound/Death_spitty.wav')
+            Spitty.death_sound.set_volume(20)
 
     def respawn_monster(self):
         if self.monster_status == False:
@@ -275,6 +280,7 @@ class Spitty:
         if group == 'tears:spittys':
             self.hp -= attack.attack_damage
             if self.hp <= 0:
+                Spitty.death_sound.play()
                 isaac.kill_cnt += 1
                 self.monster_status = False
 
