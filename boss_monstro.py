@@ -45,7 +45,7 @@ class Monstro:
 
         self.choose_wall = 0 # 리스폰 지역 설정
 
-        self.hp = 200
+        self.hp = 2000
         self.size = 200
 
         self.choose_pattern = None
@@ -80,7 +80,7 @@ class Monstro:
             self.choose_wall = random.randint(1, 4)
             #self.sucker_status = 1
             #초기화 작업
-            self.hp = 2000
+            self.hp = 2500
             self.monster_t = 0
             if self.choose_wall == 1:   #밑에 지역
                 self.x = random.randint(0, MAP_WIDTH)

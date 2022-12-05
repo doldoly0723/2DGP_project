@@ -141,7 +141,8 @@ class Attack():
         global attack_cnt
         if group == 'tears:suckers' or group == 'tears:spittys' or 'tears:monstros':
             Attack.impact_sound.play()
-            attack_cnt -= 1
+            if attack_cnt > 0:
+                attack_cnt -= 1
             game_world.remove_object(self)
 attack_on = False
 body_dir = 0

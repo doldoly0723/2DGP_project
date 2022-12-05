@@ -172,13 +172,11 @@ def update():
         game_object.update()
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
-            # print(group)
-            # print(b)
             b.handle_collision(a, group)
             a.handle_collision(b, group)
 
 
-    if player.HP == 4:
+    if player.HP == 0:
         for obj in game_world.all_objects():
             game_world.remove_object(obj)
         reset()
